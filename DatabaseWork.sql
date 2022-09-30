@@ -139,3 +139,14 @@ VALUES ('Onion Ring', 3.65, 'onr');
 
 INSERT INTO menu (menuitem, price, ingredients)
 VALUES ('Kettle Chips', 3.65, 'ktc');
+
+--Desserts
+
+INSERT INTO menu (menuitem, price, ingredients)
+VALUES ('Double Scoop Ice Cream', 3.29, 'dbi');
+
+INSERT INTO menu (menuitem, price, ingredients)
+VALUES ('Aggie Shake', 4.49, 'ash');
+
+INSERT INTO menu (menuitem, price, ingredients)
+VALUES ('Cookie Ice Cream', 4.69, 'snd');
