@@ -1,2 +1,2 @@
 *.class
-dbsetup.java
+#dbsetup.java
