@@ -27,9 +27,17 @@ CREATE TABLE orderHistory (
   pricetotal DECIMAL(6,2) NOT NULL,
 );
 
+CREATE TABLE test (
+  test_id INT GENERATED ALWAYS AS IDENTITY,
+  PRIMARY KEY(test_id)
+);
+
 CREATE TABLE orderDetails (
-  FOREIGN KEY(order_id),
-  FOREIGN KEY(food_id)
+  order_id INT,
+  food_id INT,
+  FOREIGN KEY(order_id) REFERENCES orderhistory(order_id),
+  FOREIGN KEY(food_id) REFERENCES menu(food_id),
+
 );
 
 CREATE TABLE inventory (
@@ -40,9 +48,8 @@ CREATE TABLE inventory (
 );
 
 CREATE TABLE lowInventory (
-  -- This table could be empty so didnt use "NOT NULL"
   priority_id SERIAL PRIMARY KEY,
-  FOREIGN KEY(item_id)
+  FOREIGN KEY(item_id) REFERENCES inventory(item_id)
 );
 
 
@@ -126,6 +133,17 @@ VALUES ('Drip Coffee', 2.29, 'drc');
 INSERT INTO menu (menuitem, price, ingredients)
 VALUES ('Cold Brew', 3.65, 'cbr');
 
+--Desserts
+
+INSERT INTO menu (menuitem, price, ingredients)
+VALUES ('Double Scoop Ice Cream', 3.29, 'dbi');
+
+INSERT INTO menu (menuitem, price, ingredients)
+VALUES ('Aggie Shake', 4.49, 'ash');
+
+INSERT INTO menu (menuitem, price, ingredients)
+VALUES ('Cookie Ice Cream', 4.69, 'snd');
+
 
 -- Sides NEED PRICES FOR THESE 
 INSERT INTO menu (menuitem, price, ingredients)
@@ -140,13 +158,92 @@ VALUES ('Onion Ring', 3.65, 'onr');
 INSERT INTO menu (menuitem, price, ingredients)
 VALUES ('Kettle Chips', 3.65, 'ktc');
 
---Desserts
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Buns', 3500, 3500);
 
-INSERT INTO menu (menuitem, price, ingredients)
-VALUES ('Double Scoop Ice Cream', 3.29, 'dbi');
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Texas Toast', 3500, 3500);
 
-INSERT INTO menu (menuitem, price, ingredients)
-VALUES ('Aggie Shake', 4.49, 'ash');
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Patty', 3500, 3500);
 
-INSERT INTO menu (menuitem, price, ingredients)
-VALUES ('Cookie Ice Cream', 4.69, 'snd');
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Black Bean Patty', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Bacon', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Chicken Tender', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Steak Finger', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Lettuce', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Pickle', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Tomato', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Onion', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('American Cheese', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Fries', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Tater Tots', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Onion Rings', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Kettle Chips', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Gig-em Sauce', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Spicy Ranch Sauce', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Gravy', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Buffalo Sauce', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Honey Mustard', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Ranch', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('BBQ Sauce', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Regular Fountain Drink', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Large Fountain Drink', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Aquafina 16 oz', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Aquafina 20 oz', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Double Scoop Ice Cream', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Aggie Shakes', 3500, 3500);
+
+INSERT INTO inventory(itemname, itemcount, itemfcount)
+VALUES('Cookie Ice Cream Sundae', 3500, 3500);
