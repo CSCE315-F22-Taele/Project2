@@ -5,25 +5,33 @@ import java.util.Calendar;
 public class GenerateData {
     private int numberOfDays;
 
+    /*
+     * Constructs data object
+     * @param numberOfDays: The number of days to generate.
+     */
     public GenerateData(int numberOfDays){
         this.numberOfDays = numberOfDays;
     }
 
     /*
-     * Generates random orders starting from the specied date for numberOfDays
-     * days.
+     * Generates random orders starting from the specified date for numberOfDays
      * @param stmt1: Statement to be used to access the menu items.
      * @param stmt2: Statement to insert the values into the orderhistory
+     * @param year: Used for the current year
+     * @param month: Used for the current month
+     * @param day: Used for the current day
      */
-    public void generate(Statement stmt1, Statement stmt2, int year, int month, int day){
+    public void generate(Statement stmt1, Statement stmt2, int year, int month, 
+    int day){
         Random rand = new Random();
         Calendar date = Calendar.getInstance();
         ResultSet menu;
-        int order_id = 1;
+        int orderId = 1;
 
         // Query the menu items from the database
         try{
-            menu = stmt1.executeQuery("SELECT * FROM menu ORDER BY food_id");
+            menu = stmt1.executeQuery(
+                "SELECT * FROM menu ORDER BY food_id");
         }catch(Exception e){
             System.out.println("Failure.");
             return;
@@ -75,7 +83,8 @@ public class GenerateData {
                 This is useful for debugging, but makes the code even slower.
 
                 System.out.println("Order on " + date.get(Calendar.YEAR) + "," 
-                + date.get(Calendar.MONTH) + "," + date.get(Calendar.DAY_OF_MONTH) 
+                + date.get(Calendar.MONTH) 
+                + "," + date.get(Calendar.DAY_OF_MONTH) 
                 + " At: " + date.get(Calendar.HOUR_OF_DAY) + "::" 
                 + date.get(Calendar.MINUTE) + "::" + date.get(Calendar.SECOND) 
                 + " total: " + orderTotal);
@@ -88,7 +97,9 @@ public class GenerateData {
                 + date.get(Calendar.HOUR_OF_DAY) + ":"
                 + date.get(Calendar.MINUTE) + ":" 
                 + date.get(Calendar.SECOND);
-                String insertRequest = "INSERT INTO orderhistory(order_id, time_stamp, pricetotal) VALUES(" + order_id++ + ", '" + timestamp + "', " + orderTotal + ")";
+                String insertRequest = "INSERT INTO orderhistory(order_id, "
+                + "time_stamp, pricetotal) VALUES(" + orderId++ + ", '"
+                + timestamp + "', " + orderTotal + ")";
                 try{
                     stmt2.executeUpdate(insertRequest);
                 }catch(Exception e){
@@ -99,7 +110,8 @@ public class GenerateData {
             }
 
             // Indicate the end of a day
-            System.out.println("Day " + date.get(Calendar.DAY_OF_MONTH) + " done, $" + money);
+            System.out.println("Day " 
+            + date.get(Calendar.DAY_OF_MONTH) + " done, $" + money);
         }
     }
 }
