@@ -247,3 +247,18 @@ VALUES('Aggie Shakes', 3500, 3500);
 
 INSERT INTO inventory(itemname, itemcount, itemfcount)
 VALUES('Cookie Ice Cream Sundae', 3500, 3500);
+
+
+
+-- Updating the values of the count
+
+testdb=# UPDATE inventory SET itemcount = 130 WHERE ID = 1;
+testdb=# UPDATE inventory SET itemcount = 52 WHERE ID = 5;
+testdb=# UPDATE inventory SET itemcount = 234 WHERE ID = 9;
+
+-- Inserting item_id into lowinventory
+
+INSERT INTO lowinventory (item_id) VALUES (1);
+INSERT INTO lowinventory (item_id) VALUES (5);
+INSERT INTO lowinventory (item_id) VALUES (9);
+
