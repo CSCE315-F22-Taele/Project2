@@ -9,10 +9,16 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public class serverMain implements ActionListener{
-  JButton menuButtons[] = new JButton[20];
+  String names[] = {"Bacon Cheeseburger", "Black Bean Burger", "BYO Burger", "Cheeseburger", "Double Stack Cheeseburger", "Classic Hamburger", "Chicken Caesar Salad", "Gig Em Patty Melt", "Grilled Chicken Sandwich", "Double Scoop Ice Cream", "Aggie Shake", "Cookie Ice Cream Sundae", "French Fries", "Tater Tots", "Onion Rings", "Kettle Chips", "Aquafina 16 oz", "Aquafina 20 oz", "Fountain Drink", "Chicken Tender Basket"};
 
+  Double prices[] = {7.89,7.29,6.49,6.99,9.69,6.49,8.29,7.09,7.49,3.29,4.49,4.49,2.69,2.69,2.69,2.69,1.79,2.19,2.45,6.79,7.29};
+
+  JButton menuButtons[] = new JButton[20];
+  Double runTot = 0.0; //Total price of order that is displayed to total side of screen
+  DecimalFormat df = new DecimalFormat("0.00");
   serverMain() {
     // DEFINING MAIN J OBJECTS USED
     JFrame frame = new JFrame(); 
@@ -44,12 +50,8 @@ public class serverMain implements ActionListener{
     // POPULATING BOTH MENUS WITH BUTTONS
     Integer j = 10; //counter for second page (starts at index 10)
     for(Integer i = 0; i < 10; i++){ // counter for first page (starts at index 0)
-      Integer n1 = i + 1; //starts button at 1 instead of 0
-      Integer n2 = j + 1; //starts button at 11 instead of 10
-      String c = n1.toString(); //converts number to string so it can be passed into JButton()
-      String c2 = n2.toString();
-      menuButtons[i] = new JButton(c);
-      menuButtons[j] = new JButton(c2);
+      menuButtons[i] = new JButton(names[i]);
+      menuButtons[j] = new JButton(names[j]);
       menuButtons[i].setBackground(buttonColor);
       menuButtons[i].setFont(guiFont);
       menuButtons[i].addActionListener(this);
@@ -84,12 +86,17 @@ public class serverMain implements ActionListener{
   // This will be used to open new window for customizations
   @Override
   public void actionPerformed(ActionEvent e) {
+
       for(Integer i = 0; i < 20; i++){
         if(e.getSource()==menuButtons[i]){
           //the i variable will also be passed into the constructor
           // this will allow for a specialized customize screen depending on the menu item
+          //runTot += names[i] + "  " + prices[i] + "\n";
+          System.out.println(names[i] + "  " + prices[i]);
+          runTot += prices[i];
           new serverCustomize(i);
         }
       }
+      System.out.println("Total Price: " + df.format(runTot));
   }
 }
