@@ -88,8 +88,9 @@ public class serverMain implements ActionListener{
   public void actionPerformed(ActionEvent e) {
       for(Integer i = 0; i < 20; i++){
         if(e.getSource()==menuButtons[i]){
-          //can pass specific arguments into this to pull up specialized customization options
-          new serverCustomize(); 
+          //the i variable will also be passed into the constructor
+          // this will allow for a specialized customize screen depending on the menu item
+          new serverCustomize(i); 
         }
       }
   }
