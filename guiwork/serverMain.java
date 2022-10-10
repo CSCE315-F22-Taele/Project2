@@ -7,9 +7,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class serverMain{
-  serverMain(){
+public class serverMain implements ActionListener{
+  JButton menuButtons[] = new JButton[20];
+
+  serverMain() {
     // DEFINING MAIN J OBJECTS USED
     JFrame frame = new JFrame(); 
     JPanel menu = new JPanel(); //FIRST TAB
@@ -40,18 +44,24 @@ public class serverMain{
     menu2.setLayout(new GridLayout(5,4,10,10)); // args is rows, columns
 
     // POPULATING BOTH MENUS WITH BUTTONS
-    Integer j = 11;
-    for(Integer i = 1; i <= 10; i++){
-      String c = i.toString();
-      String c2 = j.toString();
-      JButton button = new JButton(c);
-      JButton button2 = new JButton(c2);
-      button.setBackground(buttonColor);
-      button.setFont(guiFont);
-      button2.setBackground(buttonColor);
-      button2.setFont(guiFont);
-      menu.add(button);
-      menu2.add(button2);
+    Integer j = 10; //counter for second page (starts at index 10)
+    for(Integer i = 0; i < 10; i++){ // counter for first page (starts at index 0)
+      Integer n1 = i + 1; //starts button at 1 instead of 0
+      Integer n2 = j + 1; //starts button at 11 instead of 10
+      String c = n1.toString(); //converts number to string so it can be passed into JButton()
+      String c2 = n2.toString();
+      menuButtons[i] = new JButton(c);
+      menuButtons[j] = new JButton(c2);
+      menuButtons[i].setBackground(buttonColor);
+      menuButtons[i].setFont(guiFont);
+      menuButtons[i].addActionListener(this);
+
+      menuButtons[j].setBackground(buttonColor);
+      menuButtons[j].setFont(guiFont);
+      menuButtons[j].addActionListener(this);
+      menu.add(menuButtons[i]);
+      menu2.add(menuButtons[j]);
+
       j++;
     }
 
@@ -71,5 +81,16 @@ public class serverMain{
     frame.add(tabbedPane);
     frame.add(total);
     frame.setVisible(true);
+  }
+
+  // This will be used to open new window for customizations
+  @Override
+  public void actionPerformed(ActionEvent e) {
+      for(Integer i = 0; i < 20; i++){
+        if(e.getSource()==menuButtons[i]){
+          //can pass specific arguments into this to pull up specialized customization options
+          new serverCustomize(); 
+        }
+      }
   }
 }
