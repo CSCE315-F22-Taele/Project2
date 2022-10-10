@@ -1,4 +1,5 @@
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -6,6 +7,7 @@ import javax.swing.JFrame;
 // THIS IS THE NEW WINDOW THAT OPENS TO CUSTOMIZE AN ITEM
 // WILL USE CHECKBOXES FOR INGREDIENTS
 // ONLY SOME ITEMS NEED TO HAVE CUSTOMIZATION
+
 public class serverCustomize {
   serverCustomize(Integer i){
     Integer food_id = i + 1; //Match to database number
@@ -29,6 +31,7 @@ public class serverCustomize {
     for(Integer j = 0; j < 8; j++){
       // Sets all checkboxes to selected by default
       ingredients[j].setSelected(true); 
+      ingredients[j].setFont(new Font("Impact",Font.PLAIN,20));
     }
 
     if(food_id == 1){

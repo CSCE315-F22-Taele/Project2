@@ -24,8 +24,6 @@ public class serverMain implements ActionListener{
     Color buttonColor = new Color(0xEF3054);
     Color primary = new Color(0x2A2A72);
     Font guiFont = new Font("Impact",Font.PLAIN,20);
-    
-
 
     // CONFIG AND LAYOUT
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,7 +88,7 @@ public class serverMain implements ActionListener{
         if(e.getSource()==menuButtons[i]){
           //the i variable will also be passed into the constructor
           // this will allow for a specialized customize screen depending on the menu item
-          new serverCustomize(i); 
+          new serverCustomize(i);
         }
       }
   }
