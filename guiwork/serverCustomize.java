@@ -1,12 +1,11 @@
 import java.awt.FlowLayout;
 
-import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 
 // THIS IS THE NEW WINDOW THAT OPENS TO CUSTOMIZE AN ITEM
-// WILL USE RADIO BUTTONS FOR (NO) OR (YES)... YES WILL BE THE DEFAULT
+// WILL USE CHECKBOXES FOR INGREDIENTS
 public class serverCustomize {
   JLabel bacon;
   serverCustomize(Integer i){
@@ -18,22 +17,21 @@ public class serverCustomize {
     frame.setLayout(new FlowLayout());
     frame.setResizable(false);
 
-    JRadioButton yes = new JRadioButton("YES");
-    JRadioButton no = new JRadioButton("NO");
-  
-    // ButtonGroup makes it so only one button can be selected
-    ButtonGroup group = new ButtonGroup(); 
-    group.add(yes);
-    group.add(no);
-
     // if its a burger
-    // if(food_id < 6){
-    //   frame.setLayout(new FlowLayout());
-    //   JLabel bacon = new JLabel();
-    // }
-    
-    frame.add(yes);
-    frame.add(no);
+    if(food_id < 6){
+      JCheckBox cheese = new JCheckBox("CHEESE");
+      cheese.setSelected(true);
+      JCheckBox lettuce = new JCheckBox("LETTUCE");
+      lettuce.setSelected(true);
+      JCheckBox bacon = new JCheckBox("BACON");
+      bacon.setSelected(true);
+
+      frame.add(lettuce);
+      frame.add(cheese);
+      frame.add(bacon);
+    }
+
+
     frame.setVisible(true);
   }
 }
