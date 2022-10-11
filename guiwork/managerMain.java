@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-public class serverMain implements ActionListener{
+public class managerMain implements ActionListener{
   String names[] = {"Bacon Cheeseburger", "Black Bean Burger", "BYO Burger", "Cheeseburger", "Double Stack Cheeseburger", "Classic Hamburger", "Chicken Caesar Salad", "Gig Em Patty Melt", "Grilled Chicken Sandwich", "Double Scoop Ice Cream", "Aggie Shake", "Cookie Ice Cream Sundae", "French Fries", "Tater Tots", "Onion Rings", "Kettle Chips", "Aquafina 16 oz", "Aquafina 20 oz", "Fountain Drink", "Chicken Tender Basket"};
 
   Double prices[] = {7.89,7.29,6.49,6.99,9.69,6.49,8.29,7.09,7.49,3.29,4.49,4.49,2.69,2.69,2.69,2.69,1.79,2.19,2.45,6.79,7.29};
@@ -19,7 +19,7 @@ public class serverMain implements ActionListener{
   JButton menuButtons[] = new JButton[20];
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
-  serverMain() {
+  managerMain() {
     // DEFINING MAIN J OBJECTS USED
     JFrame frame = new JFrame(); 
     JPanel menu = new JPanel(); //FIRST TAB
@@ -94,7 +94,7 @@ public class serverMain implements ActionListener{
           //runTot += names[i] + "  " + prices[i] + "\n";
           System.out.println(names[i] + "  " + prices[i]);
           runTot += prices[i];
-          new managerCustomize(i);
+          new serverCustomize(i);
         }
       }
       System.out.println("Total Price: " + df.format(runTot));
