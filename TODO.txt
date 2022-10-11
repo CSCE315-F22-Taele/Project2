@@ -1,0 +1,16 @@
+Server Side:
+Create an array that keeps track of all items that are being ordered
+Display the array on the right side of the GUI
+Create a system to remove items from the currently ordered items
+Send order to SQL tables
+
+
+
+
+
+
+
+Manager Side:
+Create basic layout of GUI
+Create graphs that keep track of items
+Link Critically low inventory table to GUI
