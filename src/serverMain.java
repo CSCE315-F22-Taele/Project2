@@ -20,7 +20,7 @@ public class serverMain implements ActionListener{
   JButton menuButtons[] = new JButton[20];
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
-  
+  JButton checkout = new JButton("CHECKOUT");
   // Database object to communicate with the server
   Database db;
 
@@ -85,7 +85,7 @@ public class serverMain implements ActionListener{
     }
 
     // POPULATING TOTAL SIDE
-    JButton checkout = new JButton("CHECKOUT");
+
     checkout.addActionListener(this);
     checkout.setBounds(100,0,300,50);
     checkout.setBackground(buttonColor);
@@ -131,5 +131,9 @@ public class serverMain implements ActionListener{
         }
       }
       System.out.println("Total Price: " + df.format(runTot));
+
+      if(e.getSource()==checkout){
+        // MOVE STUFF FROM ABOVE TO ONLY DECREMENT ONCE THIS BUTTON IS PUSHED
+      }
   }
 }
