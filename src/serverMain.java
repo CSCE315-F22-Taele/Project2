@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class serverMain implements ActionListener{
   // THESE ARRAYS ARE NO LONGER BEING USED AS ALL INFO IS EXTRACTED FROM DB NOW
@@ -23,7 +24,7 @@ public class serverMain implements ActionListener{
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
   JButton checkout = new JButton("CHECKOUT");
-  ArrayList<String> currOrder; //This will be the array for the items within the current order
+  ArrayList<Integer> currOrder; //This will be the array for the items within the current order
   // Database object to communicate with the server
   Database db;
 
@@ -39,6 +40,7 @@ public class serverMain implements ActionListener{
     Color primary = new Color(0x2A2A72);
     Font guiFont = new Font("Impact",Font.PLAIN,20);
     db = new Database();
+    currOrder = new ArrayList<>();
 
     // CONFIG AND LAYOUT
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,23 +111,22 @@ public class serverMain implements ActionListener{
   // This will be used to open new window for customizations
   @Override
   public void actionPerformed(ActionEvent e) {
-    ResultSet menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+    ResultSet menuItems;
       for(Integer i = 0; i < 20; i++){
         if(e.getSource()==menuButtons[i]){
+          menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
           //the i variable will also be passed into the constructor
           // this will allow for a specialized customize screen depending on the menu item
           //runTot += names[i] + "  " + prices[i] + "\n";
 
-          // TODO move this to when the server clicks the 'finish order' button
           try{
             menuItems.absolute(i+1);
             String name = menuItems.getString("menuitem");
             double price = menuItems.getDouble("price");
-            String ings = menuItems.getString("ingredients");
+            int id = menuItems.getInt("food_id");
+            currOrder.add(id);
 
-            db.updateInventory(ings);
-
-            System.out.println(name + "  " + price);
+            System.out.println("Added to order: " + name + "  " + price);
             runTot += price;
             new serverCustomize(i);
           }catch(Exception ex){
@@ -137,6 +138,46 @@ public class serverMain implements ActionListener{
 
       if(e.getSource()==checkout){
         // MOVE STUFF FROM ABOVE TO ONLY DECREMENT ONCE THIS BUTTON IS PUSHED
+        menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+        try{
+          ResultSet orderDetails = db.executeQuery("SELECT * FROM orderdetails ORDER BY order_id");
+          int currOrderId;
+          if(!orderDetails.isBeforeFirst()){
+            currOrderId = 1;
+          }else{
+            orderDetails.last();
+            currOrderId = orderDetails.getInt("order_id") + 1;
+          }
+
+          orderDetails.close();
+
+          Calendar date = Calendar.getInstance();
+          String cmd = "INSERT INTO orderhistory(order_id, time_stamp, pricetotal) VALUES(";
+          String timestamp = "'" + date.get(Calendar.YEAR) + "-" 
+                + date.get(Calendar.MONTH) + "-" 
+                + date.get(Calendar.DAY_OF_MONTH) + " " 
+                + date.get(Calendar.HOUR_OF_DAY) + ":"
+                + date.get(Calendar.MINUTE) + ":" 
+                + date.get(Calendar.SECOND) + "'";
+          System.out.println("Command: " + cmd + currOrderId + ", " + timestamp + ", " + runTot + ")");
+          db.executeUpdate(cmd + currOrderId + ", " + timestamp + ", " + runTot + ")");
+          
+          System.out.println("Order placed: " + runTot + " at " + timestamp);
+
+          cmd = "INSERT INTO orderdetails(order_id, food_id) VALUES(";
+          for(int i=0; i<currOrder.size(); ++i){
+            int id = currOrder.get(i);
+            menuItems.absolute(id);
+            String ings = menuItems.getString("ingredients");
+            System.out.println("made it here   " + id);
+            db.updateInventory(ings);
+            System.out.println("updated " + cmd + currOrderId + ", " + id + ")");
+            db.executeUpdate(cmd + currOrderId + ", " + id + ")");
+            System.out.println("Item " + id + " ordered!");
+          }
+        }catch(Exception ex){
+          System.out.println(ex.getMessage());
+        }
       }
   }
 }

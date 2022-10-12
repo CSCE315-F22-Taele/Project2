@@ -51,11 +51,10 @@ public class Database {
 
     public void executeUpdate(String s){
         Statement stmt = createStatement();
-        ResultSet ans = null;
         try {
             stmt.executeUpdate(s);
         } catch (Exception e) {
-            System.out.println("Error occured with executing query.");
+            System.out.println(e.getMessage());
         }
     }
 
