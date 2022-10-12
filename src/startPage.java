@@ -18,14 +18,15 @@ public class startPage implements ActionListener{
     startPage(){
     
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000,1000);
+        frame.setSize(700,250);
         frame.setLayout(null);
         frame.setResizable(false);
+        frame.setBackground(primary);
 
         manager.setBackground(buttonColor);
         server.setBackground(buttonColor);
-        manager.setBounds(0,100, 200, 200);
-        server.setBounds(200,100, 200, 200);
+        manager.setBounds(50,0, 200, 200);
+        server.setBounds(400,0, 200, 200);
         manager.setFont(guiFont);
         server.setFont(guiFont);
 
