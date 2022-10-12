@@ -86,6 +86,7 @@ public class serverMain implements ActionListener{
 
     // POPULATING TOTAL SIDE
     JButton checkout = new JButton("CHECKOUT");
+    checkout.addActionListener(this);
     checkout.setBounds(100,0,300,50);
     checkout.setBackground(buttonColor);
     // checkout.setHorizontalAlignment(JButton.RIGHT);
