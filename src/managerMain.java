@@ -23,13 +23,17 @@ public class managerMain{
     //Create item range page
     JPanel itemRange = new JPanel();
     JLabel itemRangeTitle = new JLabel("Item History");
+    JLabel startTime = new JLabel("Start: ");
+    JLabel endTime = new JLabel("End: ");
+    JLabel itemSelection = new JLabel("Item: ");
+
     
     //Create current inventory
     JPanel currentInventory = new JPanel();
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
     
     //Sets up the frame
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(1000,1000);
     frame.setLayout(null);
     frame.setResizable(false);
@@ -48,9 +52,21 @@ public class managerMain{
     //Sets up item range
     itemRange.setBounds(505,0,500,500);
     itemRange.setBackground(primary);
-    itemRangeTitle.setForeground(Color.white);
+    itemRangeTitle.setForeground(new Color(0, 0, 0));
     itemRangeTitle.setFont(guiFont);
     itemRange.add(itemRangeTitle);
+
+    startTime.setBounds(500,0,100,100);
+    startTime.setForeground(Color.white);
+    itemRange.add(startTime);
+
+    endTime.setBounds(600,250,20,20);
+    endTime.setForeground(Color.white);
+    itemRange.add(endTime);
+    
+    itemRange.add(itemSelection);
+    itemSelection.setBounds(510,0,20,20);
+    itemSelection.setForeground(Color.white);
     
     //Sets up current Inventory
     currentInventory.setBounds(0,505,1000,500);
