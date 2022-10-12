@@ -11,6 +11,5 @@ Send order to SQL tables
 
 
 Manager Side:
-Create basic layout of GUI
 Create graphs that keep track of items
 Link Critically low inventory table to GUI
