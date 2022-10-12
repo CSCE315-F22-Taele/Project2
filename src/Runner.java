@@ -11,43 +11,57 @@ public class Runner {
 
     //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
     public static void main(String args[]) {
-        //Building the connection with your credentials
-        Connection conn = null;
-        String teamNumber = "65";
-        String sectionNumber = "905";
-        String dbName = "csce331_" + sectionNumber + "_" + teamNumber;
-        String dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
-        dbsetup myCredentials = new dbsetup(); 
+        Database db = new Database();
+        // ResultSet menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+        // for(Integer i = 0; i < 10; i++){
+        //     try{
+        //         menuItems.absolute(i+1);
+        //         System.out.println((i+1) + menuItems.getString("menuitem"));
+        //     }catch(Exception e){}
+        // }
+        db.updateInventory("bun");
 
-        //Connecting to the database
-        try {
-            conn = DriverManager.getConnection(dbConnectionString, dbsetup.user, dbsetup.pswd);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        }
+        db.close();
 
-        System.out.println("Opened database successfully");
 
-        try{
-            //create a statement object
-            Statement stmt1 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-            ResultSet.CONCUR_UPDATABLE);
-            Statement stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-            ResultSet.CONCUR_UPDATABLE);
 
-            GenerateData data = new GenerateData(21);
+        // //Building the connection with your credentials
+        // Connection conn = null;
+        // String teamNumber = "65";
+        // String sectionNumber = "905";
+        // String dbName = "csce331_" + sectionNumber + "_" + teamNumber;
+        // String dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
+        // dbsetup myCredentials = new dbsetup(); 
 
-            data.generate(stmt1, stmt2, 2022, 9, 1);
+        // //Connecting to the database
+        // try {
+        //     conn = DriverManager.getConnection(dbConnectionString, dbsetup.user, dbsetup.pswd);
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        //     System.err.println(e.getClass().getName()+": "+e.getMessage());
+        //     System.exit(0);
+        // }
 
-            //closing the connection
-            try {
-                conn.close();
-                System.out.println("Connection Closed.");
-            } catch(Exception e) {
-                System.out.println("Connection NOT Closed.");
-            }
-        }catch(Exception e){}
+        // System.out.println("Opened database successfully");
+
+        // try{
+        //     //create a statement object
+        //     Statement stmt1 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+        //     ResultSet.CONCUR_UPDATABLE);
+        //     Statement stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+        //     ResultSet.CONCUR_UPDATABLE);
+
+        //     GenerateData data = new GenerateData(21);
+
+        //     data.generate(stmt1, stmt2, 2022, 9, 1);
+
+        //     //closing the connection
+        //     try {
+        //         conn.close();
+        //         System.out.println("Connection Closed.");
+        //     } catch(Exception e) {
+        //         System.out.println("Connection NOT Closed.");
+        //     }
+        // }catch(Exception e){}
     }
 }
