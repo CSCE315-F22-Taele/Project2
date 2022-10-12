@@ -4,3 +4,10 @@ public class runGUI {
     new serverMain();
   }
 }
+
+// MUST BE CONNECTED TO VPN OR SCHOOL WIFI
+// Windows
+// java -cp ".;postgresql-42.2.8.jar" runGUI
+
+// Mac
+// java -cp ".:postgresql-42.2.8.jar" runGUI
