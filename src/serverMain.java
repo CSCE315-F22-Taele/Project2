@@ -117,6 +117,9 @@ public class serverMain implements ActionListener{
             menuItems.absolute(i+1);
             String name = menuItems.getString("menuitem");
             double price = menuItems.getDouble("price");
+            String ings = menuItems.getString("ingredients");
+
+            db.updateInventory(ings);
 
             System.out.println(name + "  " + price);
             runTot += price;
