@@ -52,7 +52,7 @@ public class managerMain{
     //Sets up item range
     itemRange.setBounds(505,0,500,500);
     itemRange.setBackground(primary);
-    itemRangeTitle.setForeground(Color.white);
+    itemRangeTitle.setForeground(new Color(0, 0, 0));
     itemRangeTitle.setFont(guiFont);
     itemRange.add(itemRangeTitle);
 

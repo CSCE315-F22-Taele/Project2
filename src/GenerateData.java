@@ -65,7 +65,7 @@ public class GenerateData {
                         menu.absolute(randOrder);
                         double price = menu.getDouble("price");
                         orderTotal += price;
-                        // TODO push item to order linking table
+                        //TODO push item to order linking table
                     }catch (Exception e){
                         System.out.println(e.toString());
                         return;
