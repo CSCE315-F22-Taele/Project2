@@ -11,16 +11,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class serverMain implements ActionListener{
-  String names[] = {"Bacon Cheeseburger", "Black Bean Burger", "BYO Burger", "Cheeseburger", "Double Stack Cheeseburger", "Classic Hamburger", "Chicken Caesar Salad", "Gig Em Patty Melt", "Grilled Chicken Sandwich", "Double Scoop Ice Cream", "Aggie Shake", "Cookie Ice Cream Sundae", "French Fries", "Tater Tots", "Onion Rings", "Kettle Chips", "Aquafina 16 oz", "Aquafina 20 oz", "Fountain Drink", "Chicken Tender Basket"};
+  // THESE ARRAYS ARE NO LONGER BEING USED AS ALL INFO IS EXTRACTED FROM DB NOW
+  // String names[] = {"Bacon Cheeseburger", "Black Bean Burger", "BYO Burger", "Cheeseburger", "Double Stack Cheeseburger", "Classic Hamburger", "Chicken Caesar Salad", "Gig Em Patty Melt", "Grilled Chicken Sandwich", "Double Scoop Ice Cream", "Aggie Shake", "Cookie Ice Cream Sundae", "French Fries", "Tater Tots", "Onion Rings", "Kettle Chips", "Aquafina 16 oz", "Aquafina 20 oz", "Fountain Drink", "Chicken Tender Basket"};
 
-  Double prices[] = {7.89,7.29,6.49,6.99,9.69,6.49,8.29,7.09,7.49,3.29,4.49,4.49,2.69,2.69,2.69,2.69,1.79,2.19,2.45,6.79,7.29};
+  // Double prices[] = {7.89,7.29,6.49,6.99,9.69,6.49,8.29,7.09,7.49,3.29,4.49,4.49,2.69,2.69,2.69,2.69,1.79,2.19,2.45,6.79,7.29};
 
   JButton menuButtons[] = new JButton[20];
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
   JButton checkout = new JButton("CHECKOUT");
+  ArrayList<String> currOrder; //This will be the array for the items within the current order
   // Database object to communicate with the server
   Database db;
 
