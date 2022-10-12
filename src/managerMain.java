@@ -33,7 +33,7 @@ public class managerMain{
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
     
     //Sets up the frame
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(1000,1000);
     frame.setLayout(null);
     frame.setResizable(false);
