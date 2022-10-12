@@ -111,6 +111,8 @@ public class serverMain implements ActionListener{
           //the i variable will also be passed into the constructor
           // this will allow for a specialized customize screen depending on the menu item
           //runTot += names[i] + "  " + prices[i] + "\n";
+
+          // TODO move this to when the server clicks the 'finish order' button
           try{
             menuItems.absolute(i+1);
             String name = menuItems.getString("menuitem");
