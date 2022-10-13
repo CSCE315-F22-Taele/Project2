@@ -22,6 +22,7 @@ public class managerMain implements ActionListener {
   Database db;
   ArrayList<ArrayList<String>> inventoryData;
   JButton inventoryButton = new JButton("Make Changes");
+  JTable inventoryTable = new JTable();
 
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
@@ -34,7 +35,6 @@ public class managerMain implements ActionListener {
 
     // Create critically low pane
     JPanel criticallyLow = new JPanel();
-    JLabel criticallyLowTitle = new JLabel("Critically Low Inventory");
 
     // Create item range page
     JPanel itemRange = new JPanel();
@@ -64,6 +64,7 @@ public class managerMain implements ActionListener {
       }
     }
     JTable inventoryTable = new JTable(sinv, columns);
+
     JScrollPane sPane = new JScrollPane(inventoryTable);
     sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     inventoryTable.setFont(new Font("Impact", Font.PLAIN, 15));
@@ -95,12 +96,12 @@ public class managerMain implements ActionListener {
     JScrollPane sPane_menu = new JScrollPane(menuTable);
     sPane_menu.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     menuTable.setFont(new Font("Impact", Font.PLAIN, 15));
-    sPane_menu.setBounds(20, 20, 400, 300);
-    menuTable.setBounds(20, 20, 400, 300);
+    sPane_menu.setBounds(20, 20, 450, 400);
+    menuTable.setBounds(20, 20, 450, 400);
     menuTable.setBackground(primary);
     menuTable.setForeground(Color.white);
     menuRangeTextBox.add(MenuButton);
-    menuRangeTextBox.setBounds(20, 20, 300, 300);
+    menuRangeTextBox.setBounds(100, 420, 300, 300);
 
     // Sets up the frame
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,16 +145,23 @@ public class managerMain implements ActionListener {
     // criticallyLowTitle.setFont(guiFont);
     // criticallyLow.add(criticallyLowTitle);
   }
-
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == inventoryButton) {
+      Object[] rowData = new Object [inventoryTable.getRowCount()];
 
-    }
+      System.out.println("Start");
+      System.out.println(inventoryTable.getRowCount());
 
-    // //String[][] jTableinv = new String[30][4];
-    // for(Integer i=0; i<30; i++){
-
-    // }
+      for (int i = 1; i < inventoryTable.getRowCount(); i++) {  // Loop through the rows
+        rowData[i] = inventoryTable.getValueAt(i, 2);
+        String updateSQL= "UPDATE inventory SET itemcount=" + rowData[i].toString();
+        
+        System.out.println("Data:");
+        System.out.println(rowData[i].toString());
+        db.executeQuery(updateSQL);
+     }
+    } 
   }
+
 }
