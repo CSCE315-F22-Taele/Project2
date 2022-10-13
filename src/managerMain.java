@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import javax.naming.spi.DirStateFactory.Result;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,14 +23,18 @@ public class managerMain implements ActionListener {
   Database db;
   ArrayList<ArrayList<String>> inventoryData;
   JTable inventoryTable;
-  JTable inventoryButton;
+  JTable menuTable;
+  JButton inventoryButton;
+  JButton MenuButton;
+  JButton addRow;
+  
   
 
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
     Color primary = new Color(0x2A2A72);
     Font guiFont = new Font("Impact", Font.PLAIN, 20);
-    JButton inventoryButton = new JButton("Make Changes");
+    inventoryButton = new JButton("Make Changes");
     
     // Create frame
     JFrame frame = new JFrame();
@@ -44,7 +49,8 @@ public class managerMain implements ActionListener {
     JPanel inventoryRangeTextBox = new JPanel();
     JPanel menuRangeTextBox = new JPanel();
     JLabel itemRangeTitle = new JLabel("Item History");
-    JButton MenuButton = new JButton("Add Food Item");
+    MenuButton = new JButton("Change Menu");
+    addRow = new JButton("Add Row");
     // Create current inventory
     JPanel currentInventory = new JPanel();
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
@@ -78,7 +84,9 @@ public class managerMain implements ActionListener {
     // Display Menu
     JPanel currentMenu = new JPanel();
     JLabel currentMenuTitle = new JLabel("Menu");
-    int menuSize = 20;
+    Integer menuSize = 20;
+    ResultSet menuSize2 = db.executeQuery("SELECT COUNT (food_id) FROM menu;");
+    System.out.println(menuSize2.toString());
 
     String[] columns_menu = new String[] { "food_id", "menuitem", "price", "ingredients" };
     String[][] sinv_menu = new String[menuSize][4];
@@ -94,7 +102,7 @@ public class managerMain implements ActionListener {
         System.out.println(e.getMessage());
       }
     }
-    JTable menuTable = new JTable(sinv_menu, columns_menu);
+    menuTable = new JTable(sinv_menu, columns_menu);
     JScrollPane sPane_menu = new JScrollPane(menuTable);
     sPane_menu.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     menuTable.setFont(new Font("Impact", Font.PLAIN, 15));
@@ -103,6 +111,8 @@ public class managerMain implements ActionListener {
     menuTable.setBackground(primary);
     menuTable.setForeground(Color.white);
     menuRangeTextBox.add(MenuButton);
+    menuRangeTextBox.add(addRow);
+    addRow.addActionListener(this);
     menuRangeTextBox.setBounds(100, 420, 300, 300);
 
     // Sets up the frame
@@ -139,6 +149,8 @@ public class managerMain implements ActionListener {
     inventoryRangeTextBox.setBackground(primary);
     inventoryRangeTextBox.add(inventoryButton);
     inventoryButton.addActionListener(this);
+    MenuButton.addActionListener(this);
+
 
     // Sets up critically low
     // criticallyLow.setBounds(0, 0, 500, 500);
@@ -150,19 +162,41 @@ public class managerMain implements ActionListener {
   }
 
   public void actionPerformed(ActionEvent e) {
+    System.out.println("Click");
     if (e.getSource() == inventoryButton) {
-      Object[] rowData = new Object [inventoryTable.getRowCount()];
+      Object[] itemData = new Object [inventoryTable.getRowCount()];
+      Object[] itemidData = new Object [inventoryTable.getRowCount()];
 
-      System.out.println("Start");
-      System.out.println(inventoryTable.getRowCount());
-
-      for (int i = 1; i < inventoryTable.getRowCount(); i++) {  // Loop through the rows
-        rowData[i] = inventoryTable.getValueAt(i, 2);
-        String updateSQL= "UPDATE inventory SET itemcount=" + rowData[i].toString();
-        
-        System.out.println("Data:");
-        System.out.println(rowData[i].toString());
+      for (int i = 0; i < inventoryTable.getRowCount(); i++) {  // Loop through the rows
+        itemData[i] = inventoryTable.getValueAt(i, 2);
+        itemidData[i] = inventoryTable.getValueAt(i, 0);
+        String updateSQL= "UPDATE inventory SET itemcount=" + itemData[i].toString() + " WHERE item_id=" + itemidData[i].toString() + ";";
         db.executeQuery(updateSQL);
+     }
+    } 
+
+
+    if (e.getSource() == MenuButton) {
+      System.out.println("For");
+      Object[] col0 = new Object [menuTable.getRowCount()];
+      Object[] col1 = new Object [menuTable.getRowCount()];
+      Object[] col2 = new Object [menuTable.getRowCount()];
+      Object[] col3 = new Object [menuTable.getRowCount()];
+
+      for (int i = 0; i < menuTable.getRowCount(); i++) {  // Loop through the rows
+        col0[i] = menuTable.getValueAt(i, 0);
+        col1[i] = menuTable.getValueAt(i, 1);
+        col2[i] = menuTable.getValueAt(i, 2);
+        col3[i] = menuTable.getValueAt(i, 3);
+        String updateItem= "UPDATE menu SET menuItem=" +  "\'" + col1[i] + "\'" + " WHERE food_id=" + col0[i].toString() + ";";
+        String updatePrice= "UPDATE menu SET price=" + col2[i]  + " WHERE food_id=" + col0[i].toString() + ";";
+        String updateING= "UPDATE menu SET ingredients=" + "\'" + col3[i]  +  "\'" + " WHERE food_id=" + col0[i].toString() + ";";
+        db.executeQuery(updateItem);
+        db.executeQuery(updatePrice);
+        db.executeQuery(updateING);
+     }
+    if (e.getSource() == addRow) {
+      
      }
     } 
   }
