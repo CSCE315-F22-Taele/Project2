@@ -135,7 +135,6 @@ public class serverMain implements ActionListener{
             int id = menuItems.getInt("food_id");
             currOrder.add(id);
             order += "   " + name + "   $" + price + "\n";
-            System.out.println("Added to order: " + name + "   $" + price);
             runTot += price;
             totalTitle.setText("Order Total:     $" + df.format(runTot));
             ongoingOrder.setText(order);
@@ -146,7 +145,6 @@ public class serverMain implements ActionListener{
           }
         }
       }
-      System.out.println("Total Price: " + df.format(runTot));
 
       if(e.getSource()==checkout){
         // MOVE STUFF FROM ABOVE TO ONLY DECREMENT ONCE THIS BUTTON IS PUSHED
