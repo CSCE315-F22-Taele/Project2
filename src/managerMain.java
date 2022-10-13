@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 public class managerMain{
   managerMain() {
@@ -22,10 +23,15 @@ public class managerMain{
     
     //Create item range page
     JPanel itemRange = new JPanel();
+    JPanel itemRangeTextBox = new JPanel();
+    JPanel inventoryRangeTextBox = new JPanel();
     JLabel itemRangeTitle = new JLabel("Item History");
-    JLabel startTime = new JLabel("Start: ");
-    JLabel endTime = new JLabel("End: ");
-    JLabel itemSelection = new JLabel("Item: ");
+    JTextField startTime = new JTextField("Start: ");
+    JTextField endTime = new JTextField("End: ");
+    JTextField itemSelection = new JTextField("Item: ");
+    JTextField inventoryItem = new JTextField("Item: ");
+    JTextField inventoryAmount = new JTextField("Amount: ");
+    JButton inventoryButton = new JButton("Make Selected Change");
 
     
     //Create current inventory
@@ -40,39 +46,47 @@ public class managerMain{
     frame.add(criticallyLow);
     frame.add(itemRange);
     frame.add(currentInventory);
+    frame.add(itemRangeTextBox);
+    frame.add(inventoryRangeTextBox);
     frame.setVisible(true);
     
+    
+    //Sets up item range
+    itemRange.setBounds(505,0,500,450);   //Box
+    itemRange.setBackground(primary);
+    itemRangeTextBox.setBounds(505,450,500,50);
+    itemRangeTextBox.setBackground(primary);
+    itemRangeTitle.setForeground(new Color(255, 255, 255));
+    itemRangeTitle.setFont(guiFont);
+
+    itemRange.add(itemRangeTitle);
+    itemRangeTextBox.add(startTime);
+    itemRangeTextBox.add(endTime);
+    itemRangeTextBox.add(itemSelection);
+    
+    //Sets up current Inventory
+    currentInventory.setBounds(0,505,1000,400);
+    currentInventory.setBackground(primary);
+    currentInventoryTitle.setForeground(new Color(255, 255, 255));
+    currentInventoryTitle.setFont(guiFont);
+
+    inventoryRangeTextBox.setBounds(0,905,1000,55);
+    inventoryRangeTextBox.setBackground(primary);
+    inventoryRangeTextBox.add(inventoryItem);
+    inventoryRangeTextBox.add(inventoryAmount);
+    inventoryRangeTextBox.add(inventoryButton);
+    currentInventory.add(currentInventoryTitle);
+
+    
+
+
+
+
     //Sets up critically low
     criticallyLow.setBounds(0,0,500,500);
     criticallyLow.setBackground(primary);
-    criticallyLowTitle.setForeground(Color.white);
+    criticallyLowTitle.setForeground(new Color(255, 255, 255));
     criticallyLowTitle.setFont(guiFont);
     criticallyLow.add(criticallyLowTitle);
-
-    //Sets up item range
-    itemRange.setBounds(505,0,500,500);
-    itemRange.setBackground(primary);
-    itemRangeTitle.setForeground(new Color(0, 0, 0));
-    itemRangeTitle.setFont(guiFont);
-    itemRange.add(itemRangeTitle);
-
-    startTime.setBounds(500,0,100,100);
-    startTime.setForeground(Color.white);
-    itemRange.add(startTime);
-
-    endTime.setBounds(600,250,20,20);
-    endTime.setForeground(Color.white);
-    itemRange.add(endTime);
-    
-    itemRange.add(itemSelection);
-    itemSelection.setBounds(510,0,20,20);
-    itemSelection.setForeground(Color.white);
-    
-    //Sets up current Inventory
-    currentInventory.setBounds(0,505,1000,500);
-    currentInventory.setBackground(primary);
-    currentInventoryTitle.setForeground(Color.white);
-    currentInventoryTitle.setFont(guiFont);
-    currentInventory.add(currentInventoryTitle);
   }
 }
