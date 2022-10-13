@@ -70,6 +70,31 @@ public class managerMain{
     inventoryTable.setBounds(200,550,600,300);
     inventoryTable.setBackground(primary);
     inventoryTable.setForeground(Color.white);
+
+    //Display Order History
+    String[] columns_orderhist = new String[]{"order_id", "time_stamp", "pricetotal"};
+    String[][] sinv_orderhist = new String[30][3];
+
+    ResultSet OrderhistItems = db.executeQuery("SELECT * FROM inventory ORDER BY order_id");
+    for(Integer i = 0; i < 30; i++){
+        try{
+          invItems.absolute(i+1);
+          sinv_orderhist[i][0] = OrderhistItems.getString("order_id");
+          sinv_orderhist[i][1] = OrderhistItems.getString("time_stamp");
+          sinv_orderhist[i][2] = OrderhistItems.getString("pricetotal");
+        }catch(Exception e){
+          System.out.println(e.getMessage());
+        }
+    }
+    JTable OrderhistTable = new JTable(sinv_orderhist, columns_orderhist);
+    JScrollPane sPane_orderhist = new JScrollPane(OrderhistTable);
+    sPane_orderhist.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
+    inventoryTable.setFont(new Font("Impact",Font.PLAIN,15));
+    sPane_orderhist.setBounds(200,550,600,300);
+    inventoryTable.setBounds(200,550,600,300);
+    inventoryTable.setBackground(primary);
+    inventoryTable.setForeground(Color.white);
+
     //Sets up the frame
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(1000,1000);
