@@ -19,6 +19,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.swing.table.*;
+
 public class managerMain implements ActionListener {
   Database db;
   ArrayList<ArrayList<String>> inventoryData;
@@ -26,7 +28,9 @@ public class managerMain implements ActionListener {
   JTable menuTable;
   JButton inventoryButton;
   JButton MenuButton;
-  JButton addRow;
+  JButton addRowButton;
+
+  
   
   
 
@@ -50,7 +54,7 @@ public class managerMain implements ActionListener {
     JPanel menuRangeTextBox = new JPanel();
     JLabel itemRangeTitle = new JLabel("Item History");
     MenuButton = new JButton("Change Menu");
-    addRow = new JButton("Add Row");
+    addRowButton = new JButton("Add Row");
     // Create current inventory
     JPanel currentInventory = new JPanel();
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
@@ -84,9 +88,7 @@ public class managerMain implements ActionListener {
     // Display Menu
     JPanel currentMenu = new JPanel();
     JLabel currentMenuTitle = new JLabel("Menu");
-    Integer menuSize = 20;
-    ResultSet menuSize2 = db.executeQuery("SELECT COUNT (food_id) FROM menu;");
-    System.out.println(menuSize2.toString());
+    Integer menuSize = 20;    //TODO figure out how to select how many rows are in the table
 
     String[] columns_menu = new String[] { "food_id", "menuitem", "price", "ingredients" };
     String[][] sinv_menu = new String[menuSize][4];
@@ -111,8 +113,8 @@ public class managerMain implements ActionListener {
     menuTable.setBackground(primary);
     menuTable.setForeground(Color.white);
     menuRangeTextBox.add(MenuButton);
-    menuRangeTextBox.add(addRow);
-    addRow.addActionListener(this);
+    menuRangeTextBox.add(addRowButton);
+    addRowButton.addActionListener(this);
     menuRangeTextBox.setBounds(100, 420, 300, 300);
 
     // Sets up the frame
@@ -177,7 +179,6 @@ public class managerMain implements ActionListener {
 
 
     if (e.getSource() == MenuButton) {
-      System.out.println("For");
       Object[] col0 = new Object [menuTable.getRowCount()];
       Object[] col1 = new Object [menuTable.getRowCount()];
       Object[] col2 = new Object [menuTable.getRowCount()];
@@ -194,10 +195,12 @@ public class managerMain implements ActionListener {
         db.executeQuery(updateItem);
         db.executeQuery(updatePrice);
         db.executeQuery(updateING);
-     }
-    if (e.getSource() == addRow) {
-      
+
+        //Needs ability to add a new item from a new row
      }
     } 
+    if(e.getSource() == addRowButton){
+      //Add ability to add a new row here.  Should then click update menu button to add the new item
+    }
   }
 }
