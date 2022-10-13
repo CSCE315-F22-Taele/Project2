@@ -188,14 +188,13 @@ public class serverMain implements ActionListener{
             System.out.println("updated " + cmd + currOrderId + ", " + id + ")");
             db.executeUpdate(cmd + currOrderId + ", " + id + ")");
             System.out.println("Item " + id + " ordered!");
-
-            // CLEAR OUT ORDER THAT HAS BEEN PLACED
-            ongoingOrder.setText("   Order Placed!\n");
-            order = "";
-            runTot = 0.0;
-            totalTitle.setText("Order Total:     $" + df.format(runTot));
-            currOrder.removeAll(currOrder);
           }
+          // CLEAR OUT ORDER THAT HAS BEEN PLACED
+          ongoingOrder.setText("   Order Placed!\n");
+          order = "";
+          runTot = 0.0;
+          totalTitle.setText("Order Total:     $" + df.format(runTot));
+          currOrder.removeAll(currOrder);
         }catch(Exception ex){
           System.out.println(ex.getMessage());
         }
