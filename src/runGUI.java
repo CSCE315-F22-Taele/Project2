@@ -1,6 +1,6 @@
 public class runGUI {
   public static void main(String[] args) {
-     //new managerMain();
+     //managerMain();
     // new serverMain();
     new startPage();
   }

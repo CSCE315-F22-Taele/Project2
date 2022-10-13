@@ -11,7 +11,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class managerMain {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class managerMain implements ActionListener{
   Database db;
   ArrayList<ArrayList<String>> inventoryData;
 
@@ -33,12 +40,7 @@ public class managerMain {
     JPanel itemRangeTextBox = new JPanel();
     JPanel inventoryRangeTextBox = new JPanel();
     JLabel itemRangeTitle = new JLabel("Item History");
-    JTextField startTime = new JTextField("Start: ");
-    JTextField endTime = new JTextField("End: ");
-    JTextField itemSelection = new JTextField("Item: ");
-    JTextField inventoryItem = new JTextField("Item: ");
-    JTextField inventoryAmount = new JTextField("Amount: ");
-    JButton inventoryButton = new JButton("Make Selected Change");
+    JButton inventoryButt = new JButton("Make Changes");
 
     // Create current inventory
     JPanel currentInventory = new JPanel();
@@ -73,11 +75,12 @@ public class managerMain {
     // Display Menu
     JPanel currentMenu = new JPanel();
     JLabel currentMenuTitle = new JLabel("Menu");
+    int menuSize = 20;
 
     String[] columns_menu = new String[] { "food_id", "menuitem", "price", "ingredients" };
-    String[][] sinv_menu = new String[21][4];
-    ResultSet MenuItems = db.executeQuery("SELECT * FROM inventory ORDER BY food_id");
-    for (Integer i = 0; i < 30; i++) {
+    String[][] sinv_menu = new String[menuSize][4];
+    ResultSet MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+    for (Integer i = 0; i < menuSize; i++) {
       try {
         MenuItems.absolute(i + 1);
         sinv_menu[i][0] = MenuItems.getString("food_id");
@@ -92,8 +95,8 @@ public class managerMain {
     JScrollPane sPane_menu = new JScrollPane(menuTable);
     sPane_menu.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     menuTable.setFont(new Font("Impact", Font.PLAIN, 15));
-    sPane_menu.setBounds(200, 550, 600, 300);
-    menuTable.setBounds(200, 550, 600, 300);
+    sPane_menu.setBounds(20, 20, 400, 300);
+    menuTable.setBounds(20, 20, 400, 300);
     menuTable.setBackground(primary);
     menuTable.setForeground(Color.white);
 
@@ -104,7 +107,7 @@ public class managerMain {
     frame.setLayout(null);
     frame.setResizable(false);
     frame.add(sPane);
-
+    frame.add(sPane_menu);
     frame.add(criticallyLow);
     frame.add(itemRange);
     frame.add(itemRangeTextBox);
@@ -120,9 +123,6 @@ public class managerMain {
     itemRangeTitle.setFont(guiFont);
 
     itemRange.add(itemRangeTitle);
-    itemRangeTextBox.add(startTime);
-    itemRangeTextBox.add(endTime);
-    itemRangeTextBox.add(itemSelection);
 
     // Sets up current Inventory
     currentInventory.setBounds(0, 505, 1000, 400);
@@ -132,17 +132,29 @@ public class managerMain {
 
     inventoryRangeTextBox.setBounds(0, 905, 1000, 55);
     inventoryRangeTextBox.setBackground(primary);
-    inventoryRangeTextBox.add(inventoryItem);
-    inventoryRangeTextBox.add(inventoryAmount);
-    inventoryRangeTextBox.add(inventoryButton);
-    currentInventory.add(currentInventoryTitle);
+    inventoryRangeTextBox.add(inventoryButt);
+    inventoryButt.addActionListener(this);
+    
 
 
     // Sets up critically low
-    criticallyLow.setBounds(0, 0, 500, 500);
-    criticallyLow.setBackground(primary);
-    criticallyLowTitle.setForeground(new Color(255, 255, 255));
-    criticallyLowTitle.setFont(guiFont);
-    criticallyLow.add(criticallyLowTitle);
+    // criticallyLow.setBounds(0, 0, 500, 500);
+    // criticallyLow.setBackground(primary);
+    // criticallyLowTitle.setForeground(new Color(255, 255, 255));
+    // criticallyLowTitle.setFont(guiFont);
+    // criticallyLow.add(criticallyLowTitle);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    // if(e.getSource() == inventoryButt)
+    // {
+
+    // }
+
+    // //String[][] jTableinv = new String[30][4];
+    // for(Integer i=0; i<30; i++){
+
+    // }
   }
 }
