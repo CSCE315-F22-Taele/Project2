@@ -1,14 +1,20 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
+
 public class managerMain{
+  Database db;
+  ArrayList<ArrayList<String>> inventoryData;
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
     Color primary = new Color(0x2A2A72);
@@ -16,6 +22,7 @@ public class managerMain{
 
     //Create frame
     JFrame frame = new JFrame();  
+    db = new Database();
 
     //Create critically low pane
     JPanel criticallyLow = new JPanel();
@@ -37,15 +44,41 @@ public class managerMain{
     //Create current inventory
     JPanel currentInventory = new JPanel();
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
-    
+
+
+    String[] columns = new String[]{"item_id", "itemname", "itemcount", "itemfcount"};
+    String[][] sinv = new String[30][4];
+
+    // Display inventory
+    ResultSet invItems = db.executeQuery("SELECT * FROM inventory ORDER BY itemcount");
+    for(Integer i = 0; i < 30; i++){
+        try{
+          invItems.absolute(i+1);
+          sinv[i][0] = invItems.getString("item_id");
+          sinv[i][1] = invItems.getString("itemname");
+          sinv[i][2] = invItems.getString("itemcount");
+          sinv[i][3] = invItems.getString("itemfcount");
+        }catch(Exception e){
+          System.out.println(e.getMessage());
+        }
+    }
+    JTable inventoryTable = new JTable(sinv, columns);
+    JScrollPane sPane = new JScrollPane(inventoryTable);
+    sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
+    inventoryTable.setFont(new Font("Impact",Font.PLAIN,15));
+    sPane.setBounds(200,550,600,300);
+    inventoryTable.setBounds(200,550,600,300);
+    inventoryTable.setBackground(primary);
+    inventoryTable.setForeground(Color.white);
     //Sets up the frame
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(1000,1000);
     frame.setLayout(null);
     frame.setResizable(false);
+    frame.add(sPane);
+
     frame.add(criticallyLow);
     frame.add(itemRange);
-    frame.add(currentInventory);
     frame.add(itemRangeTextBox);
     frame.add(inventoryRangeTextBox);
     frame.setVisible(true);
@@ -76,10 +109,6 @@ public class managerMain{
     inventoryRangeTextBox.add(inventoryAmount);
     inventoryRangeTextBox.add(inventoryButton);
     currentInventory.add(currentInventoryTitle);
-
-    
-
-
 
 
     //Sets up critically low
