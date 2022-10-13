@@ -18,9 +18,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class managerMain implements ActionListener{
+public class managerMain implements ActionListener {
   Database db;
   ArrayList<ArrayList<String>> inventoryData;
+  JButton inventoryButton = new JButton("Make Changes");
 
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
@@ -39,9 +40,9 @@ public class managerMain implements ActionListener{
     JPanel itemRange = new JPanel();
     JPanel itemRangeTextBox = new JPanel();
     JPanel inventoryRangeTextBox = new JPanel();
+    JPanel menuRangeTextBox = new JPanel();
     JLabel itemRangeTitle = new JLabel("Item History");
-    JButton inventoryButt = new JButton("Make Changes");
-
+    JButton MenuButton = new JButton("Add Food Item");
     // Create current inventory
     JPanel currentInventory = new JPanel();
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
@@ -71,7 +72,6 @@ public class managerMain implements ActionListener{
     inventoryTable.setBackground(primary);
     inventoryTable.setForeground(Color.white);
 
-
     // Display Menu
     JPanel currentMenu = new JPanel();
     JLabel currentMenuTitle = new JLabel("Menu");
@@ -99,7 +99,8 @@ public class managerMain implements ActionListener{
     menuTable.setBounds(20, 20, 400, 300);
     menuTable.setBackground(primary);
     menuTable.setForeground(Color.white);
-
+    menuRangeTextBox.add(MenuButton);
+    menuRangeTextBox.setBounds(20, 20, 300, 300);
 
     // Sets up the frame
     // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,6 +110,7 @@ public class managerMain implements ActionListener{
     frame.add(sPane);
     frame.add(sPane_menu);
     frame.add(criticallyLow);
+    frame.add(menuRangeTextBox);
     frame.add(itemRange);
     frame.add(itemRangeTextBox);
     frame.add(inventoryRangeTextBox);
@@ -132,10 +134,8 @@ public class managerMain implements ActionListener{
 
     inventoryRangeTextBox.setBounds(0, 905, 1000, 55);
     inventoryRangeTextBox.setBackground(primary);
-    inventoryRangeTextBox.add(inventoryButt);
-    inventoryButt.addActionListener(this);
-    
-
+    inventoryRangeTextBox.add(inventoryButton);
+    inventoryButton.addActionListener(this);
 
     // Sets up critically low
     // criticallyLow.setBounds(0, 0, 500, 500);
@@ -147,10 +147,9 @@ public class managerMain implements ActionListener{
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    // if(e.getSource() == inventoryButt)
-    // {
+    if (e.getSource() == inventoryButton) {
 
-    // }
+    }
 
     // //String[][] jTableinv = new String[30][4];
     // for(Integer i=0; i<30; i++){
