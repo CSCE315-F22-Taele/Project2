@@ -27,6 +27,7 @@ public class serverMain implements ActionListener{
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
   JButton checkout = new JButton("CHECKOUT");
+  JButton clear = new JButton("CLEAR ORDER");
   ArrayList<Integer> currOrder; //This will be the array for the items within the current order
   JTextArea ongoingOrder = new JTextArea("   Current Order:\n", 35,35);
   String order = "";
@@ -102,6 +103,8 @@ public class serverMain implements ActionListener{
     // POPULATING TOTAL SIDE
     checkout.addActionListener(this);
     checkout.setBackground(buttonColor);
+    clear.addActionListener(this);
+    clear.setBackground(buttonColor);
 
 
 
@@ -111,6 +114,7 @@ public class serverMain implements ActionListener{
     total.add(totalTitle); //The order that these are added matters
     total.add(ongoingOrder);
     total.add(checkout);
+    total.add(clear);
     frame.add(tabbedPane);
     frame.add(total);
     frame.setVisible(true);
@@ -188,6 +192,13 @@ public class serverMain implements ActionListener{
         }catch(Exception ex){
           System.out.println(ex.getMessage());
         }
+      }
+
+      if(e.getSource()==clear){
+        ongoingOrder.setText("");
+        runTot = 0.0;
+        totalTitle.setText("Order Total:     $" + df.format(runTot));
+        currOrder.removeAll(currOrder);
       }
   }
 }
