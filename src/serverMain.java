@@ -31,7 +31,7 @@ public class serverMain implements ActionListener{
   ArrayList<Integer> currOrder; //This will be the array for the items within the current order
   JTextArea ongoingOrder = new JTextArea("   Current Order:\n", 35,35);
   String order = "";
-  JLabel totalTitle = new JLabel("Order Total:     " + runTot, JLabel.CENTER);
+  JLabel totalTitle = new JLabel("Order Total:     " + df.format(runTot), JLabel.CENTER);
   // Database object to communicate with the server
   Database db;
 
@@ -173,10 +173,10 @@ public class serverMain implements ActionListener{
                 + date.get(Calendar.HOUR_OF_DAY) + ":"
                 + date.get(Calendar.MINUTE) + ":" 
                 + date.get(Calendar.SECOND) + "'";
-          System.out.println("Command: " + cmd + currOrderId + ", " + timestamp + ", " + runTot + ")");
-          db.executeUpdate(cmd + currOrderId + ", " + timestamp + ", " + runTot + ")");
+          System.out.println("Command: " + cmd + currOrderId + ", " + timestamp + ", " + df.format(runTot) + ")");
+          db.executeUpdate(cmd + currOrderId + ", " + timestamp + ", " + df.format(runTot) + ")");
           
-          System.out.println("Order placed: " + runTot + " at " + timestamp);
+          System.out.println("Order placed: " + df.format(runTot) + " at " + timestamp);
 
           cmd = "INSERT INTO orderdetails(order_id, food_id) VALUES(";
           for(int i=0; i<currOrder.size(); ++i){
@@ -188,6 +188,13 @@ public class serverMain implements ActionListener{
             System.out.println("updated " + cmd + currOrderId + ", " + id + ")");
             db.executeUpdate(cmd + currOrderId + ", " + id + ")");
             System.out.println("Item " + id + " ordered!");
+
+            // CLEAR OUT ORDER THAT HAS BEEN PLACED
+            ongoingOrder.setText("   Order Placed!\n");
+            order = "";
+            runTot = 0.0;
+            totalTitle.setText("Order Total:     $" + df.format(runTot));
+            currOrder.removeAll(currOrder);
           }
         }catch(Exception ex){
           System.out.println(ex.getMessage());
@@ -196,6 +203,7 @@ public class serverMain implements ActionListener{
 
       if(e.getSource()==clear){
         ongoingOrder.setText("");
+        order = "";
         runTot = 0.0;
         totalTitle.setText("Order Total:     $" + df.format(runTot));
         currOrder.removeAll(currOrder);
