@@ -21,14 +21,16 @@ import java.util.Calendar;
 public class managerMain implements ActionListener {
   Database db;
   ArrayList<ArrayList<String>> inventoryData;
-  JButton inventoryButton = new JButton("Make Changes");
-  JTable inventoryTable = new JTable();
+  JTable inventoryTable;
+  JTable inventoryButton;
+  
 
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
     Color primary = new Color(0x2A2A72);
     Font guiFont = new Font("Impact", Font.PLAIN, 20);
-
+    JButton inventoryButton = new JButton("Make Changes");
+    
     // Create frame
     JFrame frame = new JFrame();
     db = new Database();
@@ -63,7 +65,7 @@ public class managerMain implements ActionListener {
         System.out.println(e.getMessage());
       }
     }
-    JTable inventoryTable = new JTable(sinv, columns);
+    inventoryTable = new JTable(sinv, columns);
 
     JScrollPane sPane = new JScrollPane(inventoryTable);
     sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -144,8 +146,9 @@ public class managerMain implements ActionListener {
     // criticallyLowTitle.setForeground(new Color(255, 255, 255));
     // criticallyLowTitle.setFont(guiFont);
     // criticallyLow.add(criticallyLowTitle);
+    
   }
-  @Override
+
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == inventoryButton) {
       Object[] rowData = new Object [inventoryTable.getRowCount()];
@@ -163,5 +166,4 @@ public class managerMain implements ActionListener {
      }
     } 
   }
-
 }
