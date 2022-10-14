@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -7,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -24,7 +27,11 @@ public class serverMain implements ActionListener{
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
   JButton checkout = new JButton("CHECKOUT");
+  JButton clear = new JButton("CLEAR ORDER");
   ArrayList<Integer> currOrder; //This will be the array for the items within the current order
+  JTextArea ongoingOrder = new JTextArea("   Current Order:\n", 35,35);
+  String order = "";
+  JLabel totalTitle = new JLabel("Order Total:     " + df.format(runTot), JLabel.CENTER);
   // Database object to communicate with the server
   Database db;
 
@@ -34,8 +41,9 @@ public class serverMain implements ActionListener{
     JPanel menu = new JPanel(); //FIRST TAB
     JPanel menu2 = new JPanel(); //SECOND TAB
     JPanel total = new JPanel(); //RIGHT SIDE OF GUI WHERE RUNNING TOTAL IS KEPT
+
     JTabbedPane tabbedPane = new JTabbedPane(); //ALLOWS FOR TABBED MENU
-    JLabel totalTitle = new JLabel("Order Total");
+
     Color buttonColor = new Color(0xEF3054);
     Color primary = new Color(0x2A2A72);
     Font guiFont = new Font("Impact",Font.PLAIN,20);
@@ -53,7 +61,11 @@ public class serverMain implements ActionListener{
     total.setBounds(500,0,500,1000);
     total.setBackground(primary);
     totalTitle.setForeground(Color.white);
+    totalTitle.setPreferredSize(new Dimension(250,100));
     totalTitle.setFont(guiFont);
+    totalTitle.setVerticalAlignment(JLabel.BOTTOM);
+    ongoingOrder.setBounds(600,300,400,1000);
+    ongoingOrder.setFont(new Font("Impact",Font.PLAIN,17));
 
     menu.setLayout(new GridLayout(5,4,10,10)); // args is rows, columns
     menu2.setLayout(new GridLayout(5,4,10,10)); // args is rows, columns
@@ -64,8 +76,7 @@ public class serverMain implements ActionListener{
     Integer j = 10; //counter for second page (starts at index 10)
     for(Integer i = 0; i < 10; i++){ // counter for first page (starts at index 0)
       try{
-        //menuButtons[i] = new JButton(names[i]);
-        //menuButtons[j] = new JButton(names[j]);
+
         menuItems.absolute(i+1);
         String name = menuItems.getString("menuitem");
         menuButtons[i] = new JButton(name);
@@ -90,19 +101,20 @@ public class serverMain implements ActionListener{
     }
 
     // POPULATING TOTAL SIDE
-
     checkout.addActionListener(this);
-    checkout.setBounds(100,0,300,50);
     checkout.setBackground(buttonColor);
-    // checkout.setHorizontalAlignment(JButton.RIGHT);
-    // checkout.setVerticalAlignment(JButton.BOTTOM);
+    clear.addActionListener(this);
+    clear.setBackground(buttonColor);
+
 
 
     // ADDING ITEMS TO PROPER CONTAINER
     tabbedPane.add("Menu1", menu);
     tabbedPane.add("Menu2", menu2);
-    total.add(totalTitle);
+    total.add(totalTitle); //The order that these are added matters
+    total.add(ongoingOrder);
     total.add(checkout);
+    total.add(clear);
     frame.add(tabbedPane);
     frame.add(total);
     frame.setVisible(true);
@@ -112,6 +124,7 @@ public class serverMain implements ActionListener{
   @Override
   public void actionPerformed(ActionEvent e) {
     ResultSet menuItems;
+
       for(Integer i = 0; i < 20; i++){
         if(e.getSource()==menuButtons[i]){
           menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
@@ -125,16 +138,17 @@ public class serverMain implements ActionListener{
             double price = menuItems.getDouble("price");
             int id = menuItems.getInt("food_id");
             currOrder.add(id);
-
-            System.out.println("Added to order: " + name + "  " + price);
+            order += "   " + name + "   $" + price + "\n";
             runTot += price;
+            totalTitle.setText("Order Total:     $" + df.format(runTot));
+            ongoingOrder.setText(order);
+
             new serverCustomize(i);
           }catch(Exception ex){
             System.out.println(ex.getMessage());
           }
         }
       }
-      System.out.println("Total Price: " + df.format(runTot));
 
       if(e.getSource()==checkout){
         // MOVE STUFF FROM ABOVE TO ONLY DECREMENT ONCE THIS BUTTON IS PUSHED
@@ -164,10 +178,10 @@ public class serverMain implements ActionListener{
                 + date.get(Calendar.HOUR_OF_DAY) + ":"
                 + date.get(Calendar.MINUTE) + ":" 
                 + date.get(Calendar.SECOND) + "'";
-          System.out.println("Command: " + cmd + currOrderId + ", " + timestamp + ", " + runTot + ")");
-          db.executeUpdate(cmd + currOrderId + ", " + timestamp + ", " + runTot + ")");
+          System.out.println("Command: " + cmd + currOrderId + ", " + timestamp + ", " + df.format(runTot) + ")");
+          db.executeUpdate(cmd + currOrderId + ", " + timestamp + ", " + df.format(runTot) + ")");
           
-          System.out.println("Order placed: " + runTot + " at " + timestamp);
+          System.out.println("Order placed: " + df.format(runTot) + " at " + timestamp);
 
           cmd = "INSERT INTO orderdetails(order_id, food_id) VALUES(";
           for(int i=0; i<currOrder.size(); ++i){
@@ -180,11 +194,23 @@ public class serverMain implements ActionListener{
             db.executeUpdate(cmd + currOrderId + ", " + id + ")");
             System.out.println("Item " + id + " ordered!");
           }
-
+          // CLEAR OUT ORDER THAT HAS BEEN PLACED
+          ongoingOrder.setText("   Order Placed!\n");
+          order = "";
           runTot = 0.0;
+          totalTitle.setText("Order Total:     $" + df.format(runTot));
+          currOrder.removeAll(currOrder);
         }catch(Exception ex){
           System.out.println(ex.getMessage());
         }
+      }
+
+      if(e.getSource()==clear){
+        ongoingOrder.setText("");
+        order = "";
+        runTot = 0.0;
+        totalTitle.setText("Order Total:     $" + df.format(runTot));
+        currOrder.removeAll(currOrder);
       }
   }
 }
