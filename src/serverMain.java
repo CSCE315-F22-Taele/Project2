@@ -151,6 +151,11 @@ public class serverMain implements ActionListener{
 
           orderDetails.close();
 
+          System.out.println("look at me");
+          for(Integer i:currOrder){
+            System.out.println("item " + i);
+          }
+
           Calendar date = Calendar.getInstance();
           String cmd = "INSERT INTO orderhistory(order_id, time_stamp, pricetotal) VALUES(";
           String timestamp = "'" + date.get(Calendar.YEAR) + "-" 
@@ -175,6 +180,8 @@ public class serverMain implements ActionListener{
             db.executeUpdate(cmd + currOrderId + ", " + id + ")");
             System.out.println("Item " + id + " ordered!");
           }
+
+          runTot = 0.0;
         }catch(Exception ex){
           System.out.println(ex.getMessage());
         }
