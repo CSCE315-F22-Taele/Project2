@@ -85,14 +85,24 @@ public class managerMain implements ActionListener {
     inventoryTable.setBackground(primary);
     inventoryTable.setForeground(Color.white);
 
+    ResultSet MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+
     // Display Menu
     JPanel currentMenu = new JPanel();
     JLabel currentMenuTitle = new JLabel("Menu");
-    Integer menuSize = 20;    //TODO figure out how to select how many rows are in the table
+
+    Integer menuSize = 0;
+    try{
+      MenuItems.last();
+      menuSize = MenuItems.getInt("food_id");
+    }catch(Exception e){
+      System.out.println(e.getMessage());
+    }
 
     String[] columns_menu = new String[] { "food_id", "menuitem", "price", "ingredients" };
     String[][] sinv_menu = new String[menuSize][4];
-    ResultSet MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+    menuTable = new JTable(new DefaultTableModel(columns_menu, 0));
+
     for (Integer i = 0; i < menuSize; i++) {
       try {
         MenuItems.absolute(i + 1);
@@ -100,11 +110,15 @@ public class managerMain implements ActionListener {
         sinv_menu[i][1] = MenuItems.getString("menuitem");
         sinv_menu[i][2] = MenuItems.getString("price");
         sinv_menu[i][3] = MenuItems.getString("ingredients");
+        DefaultTableModel model = (DefaultTableModel) menuTable.getModel();
+        model.addRow(sinv_menu[i]);
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
     }
-    menuTable = new JTable(sinv_menu, columns_menu);
+
+    // menuTable = new JTable(sinv_menu, columns_menu);
+    //menuTable = updateTable(MenuItems);
     JScrollPane sPane_menu = new JScrollPane(menuTable);
     sPane_menu.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     menuTable.setFont(new Font("Impact", Font.PLAIN, 15));
@@ -163,6 +177,10 @@ public class managerMain implements ActionListener {
     
   }
 
+  public void updateTable(ResultSet MenuItems, JTable tbl, String[][] sinv_menu){
+    
+  }
+
   public void actionPerformed(ActionEvent e) {
     System.out.println("Click");
     if (e.getSource() == inventoryButton) {
@@ -189,18 +207,44 @@ public class managerMain implements ActionListener {
         col1[i] = menuTable.getValueAt(i, 1);
         col2[i] = menuTable.getValueAt(i, 2);
         col3[i] = menuTable.getValueAt(i, 3);
-        String updateItem= "UPDATE menu SET menuItem=" +  "\'" + col1[i] + "\'" + " WHERE food_id=" + col0[i].toString() + ";";
-        String updatePrice= "UPDATE menu SET price=" + col2[i]  + " WHERE food_id=" + col0[i].toString() + ";";
-        String updateING= "UPDATE menu SET ingredients=" + "\'" + col3[i]  +  "\'" + " WHERE food_id=" + col0[i].toString() + ";";
-        db.executeQuery(updateItem);
-        db.executeQuery(updatePrice);
-        db.executeQuery(updateING);
+        String updateItem= "UPDATE menu SET menuItem=" +  "\'" + col1[i] + "\'" + " WHERE food_id=" + col0[i].toString();
+        String updatePrice= "UPDATE menu SET price=" + col2[i]  + " WHERE food_id=" + col0[i].toString();
+        String updateING= "UPDATE menu SET ingredients=" + "\'" + col3[i]  +  "\'" + " WHERE food_id=" + col0[i].toString();
+        System.out.println("CMD1 " + updateItem + "\n");
+        db.executeUpdate(updateItem);
+        db.executeUpdate(updatePrice);
+        db.executeUpdate(updateING);
 
         //Needs ability to add a new item from a new row
      }
     } 
     if(e.getSource() == addRowButton){
-      //Add ability to add a new row here.  Should then click update menu button to add the new item
+      ResultSet MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+      Integer menuSize = 0;
+      try{
+        MenuItems.last();
+        menuSize = MenuItems.getInt("food_id");
+        MenuItems.close();
+      }catch(Exception ex){
+        System.out.println(ex.getMessage());
+      }
+      
+      String cmd = "INSERT INTO menu(food_id, menuitem, price, ingredients) VALUES("
+      + (menuSize + 1) + ", 'enter item name', 0.00, 'add ingredients')";
+      db.executeUpdate(cmd);
+      String[] newRow = new String[4];
+      MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+      try{
+        MenuItems.last();
+        newRow[0] = MenuItems.getString("food_id");
+        newRow[1] = MenuItems.getString("menuitem");
+        newRow[2] = MenuItems.getString("price");
+        newRow[3] = MenuItems.getString("ingredients");
+        DefaultTableModel model = (DefaultTableModel) menuTable.getModel();
+        model.addRow(newRow);
+      }catch(Exception ex){
+        System.out.println(ex.getMessage());
+      }
     }
   }
 }

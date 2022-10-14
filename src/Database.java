@@ -44,7 +44,7 @@ public class Database {
         try {
             ans = stmt.executeQuery(s);
         } catch (Exception e) {
-            System.out.println("Error occured with executing query.");
+            System.out.println(e.getMessage());
         }
         return ans;
     }
