@@ -1,8 +1,7 @@
 import java.sql.*;
 
 /*
-CSCE 331
-Group 65
+THIS IS A TESTING FILE
  */
 public class Runner {
     //Commands to run this script

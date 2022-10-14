@@ -6,7 +6,6 @@ public class Database {
     private String sectionNumber;
     private String dbName;
     private String dbConnectionString;
-    //private dbsetup myCredentials;
 
     public Database() {
         conn = null;
