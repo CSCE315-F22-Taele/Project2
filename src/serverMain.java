@@ -180,11 +180,6 @@ public class serverMain implements ActionListener{
 
           orderDetails.close();
 
-          System.out.println("look at me");
-          for(Integer i:currOrder){
-            System.out.println("item " + i);
-          }
-
           Calendar date = Calendar.getInstance();
           String cmd = "INSERT INTO orderhistory(order_id, time_stamp, pricetotal) VALUES(";
           String timestamp = "'" + date.get(Calendar.YEAR) + "-" 
@@ -193,21 +188,15 @@ public class serverMain implements ActionListener{
                 + date.get(Calendar.HOUR_OF_DAY) + ":"
                 + date.get(Calendar.MINUTE) + ":" 
                 + date.get(Calendar.SECOND) + "'";
-          System.out.println("Command: " + cmd + currOrderId + ", " + timestamp + ", " + df.format(runTot) + ")");
           db.executeUpdate(cmd + currOrderId + ", " + timestamp + ", " + df.format(runTot) + ")");
-          
-          System.out.println("Order placed: " + df.format(runTot) + " at " + timestamp);
 
           cmd = "INSERT INTO orderdetails(order_id, food_id) VALUES(";
           for(int i=0; i<currOrder.size(); ++i){
             int id = currOrder.get(i);
             menuItems.absolute(id);
             String ings = menuItems.getString("ingredients");
-            System.out.println("made it here   " + id);
             db.updateInventory(ings);
-            System.out.println("updated " + cmd + currOrderId + ", " + id + ")");
             db.executeUpdate(cmd + currOrderId + ", " + id + ")");
-            System.out.println("Item " + id + " ordered!");
           }
           // CLEAR OUT ORDER THAT HAS BEEN PLACED
           ongoingOrder.setText("   Order Placed!\n");
