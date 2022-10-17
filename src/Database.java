@@ -13,8 +13,7 @@ public class Database {
         sectionNumber = "905";
         dbName = "csce331_" + sectionNumber + "_" + teamNumber;
         dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
-        //myCredentials = new dbsetup();
-
+        
         // Connecting to the database
         try {
             conn = DriverManager.getConnection(dbConnectionString, dbsetup.user, dbsetup.pswd);
@@ -69,8 +68,13 @@ public class Database {
 
     public void updateInventory(String ingredients) {
         ResultSet inv = executeQuery("SELECT * FROM inventory ORDER BY item_id");
+        int currInv = 0;
+        try{
+            inv.last();
+            currInv = inv.getInt("item_id");
+        }catch(Exception e){}
         String[] ings = ingredients.split(",");
-        int[] subAmt = new int[ings.length];
+        int[] subAmt = new int[currInv+1];
         String query = "UPDATE inventory SET itemcount = ";
         String query2 = " WHERE item_id=";
         int nextCount;
@@ -78,7 +82,7 @@ public class Database {
             try{
                 switch(s){
                     case "bun":
-                        subAmt[0]++;;
+                        subAmt[0]++;
                         break;
                     case "txt":
                         subAmt[1]++;
@@ -174,6 +178,7 @@ public class Database {
         for(int i=0; i<subAmt.length; ++i){
             try{
                 if(subAmt[i] != 0){
+                    inv = executeQuery("SELECT * FROM inventory ORDER BY item_id");
                     inv.absolute(i+1);
                     nextCount = inv.getInt("itemcount") - subAmt[i];
                     executeUpdate(query + nextCount + query2 + (i+1));
@@ -184,7 +189,9 @@ public class Database {
                         executeUpdate("INSERT INTO lowinventory (item_id) VALUES (" + (i+1) + ")");
                     }
                 }
-            }catch(Exception e){}
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
