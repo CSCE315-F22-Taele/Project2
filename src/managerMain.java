@@ -26,6 +26,7 @@ public class managerMain implements ActionListener {
   ArrayList<ArrayList<String>> inventoryData;
   JTable inventoryTable;
   JTable menuTable;
+  JTable critTable;
   JButton inventoryButton;
   JButton MenuButton;
   JButton addRowButton;
@@ -88,6 +89,33 @@ public class managerMain implements ActionListener {
         System.out.println(e.getMessage());
       }
     }
+
+    String[] cicolumns = new String[] { "item_id", "itemname", "itemcount", "itemfcount" };
+    String[][] cisinv = new String[30][4];
+    ResultSet critItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
+    Integer ciSize = 0;
+    try{
+      critItems.last();
+      ciSize = inventoryItems.getInt("item_id");
+    }catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+
+    // Critically Low inventory
+    ResultSet critLowItems = db.executeQuery("SELECT * FROM inventory ORDER BY priority_id");
+    critTable = new JTable(new DefaultTableModel(cicolumns, 0));
+    for (Integer i = 0; i < ciSize; i++) {
+      try {
+        invItems.absolute(i + 1);
+        sinv[i][0] = critLowItems.getString("priority_id");
+        sinv[i][1] = critLowItems.getString("item_id");
+        DefaultTableModel model = (DefaultTableModel) critTable.getModel();
+        model.addRow(cisinv[i]);
+      } catch (Exception e) {
+          System.out.println(e.getMessage());
+      }
+    }
+
 
     JScrollPane sPane = new JScrollPane(inventoryTable);
     sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -179,16 +207,7 @@ public class managerMain implements ActionListener {
     inventoryRangeTextBox.add(inventoryButton);
     inventoryRangeTextBox.add(invaddRowButton);
     inventoryButton.addActionListener(this);
-    MenuButton.addActionListener(this);
-
-
-    // Sets up critically low
-    // criticallyLow.setBounds(0, 0, 500, 500);
-    // criticallyLow.setBackground(primary);
-    // criticallyLowTitle.setForeground(new Color(255, 255, 255));
-    // criticallyLowTitle.setFont(guiFont);
-    // criticallyLow.add(criticallyLowTitle);
-    
+    MenuButton.addActionListener(this);   
   }
 
 
