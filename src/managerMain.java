@@ -29,6 +29,7 @@ public class managerMain implements ActionListener {
   JButton inventoryButton;
   JButton MenuButton;
   JButton addRowButton;
+  JButton invaddRowButton;
 
   
   
@@ -55,27 +56,38 @@ public class managerMain implements ActionListener {
     JLabel itemRangeTitle = new JLabel("Item History");
     MenuButton = new JButton("Change Menu");
     addRowButton = new JButton("Add Row");
+    invaddRowButton = new JButton("Add Row");
     // Create current inventory
     JPanel currentInventory = new JPanel();
     JLabel currentInventoryTitle = new JLabel("Current Inventory");
 
     String[] columns = new String[] { "item_id", "itemname", "itemcount", "itemfcount" };
     String[][] sinv = new String[30][4];
+    ResultSet inventoryItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
+    Integer inventorySize = 0;
+    try{
+      inventoryItems.last();
+      inventorySize = inventoryItems.getInt("item_id");
+    }catch(Exception e){
+      System.out.println(e.getMessage());
+    }
 
     // Display inventory
     ResultSet invItems = db.executeQuery("SELECT * FROM inventory ORDER BY itemcount");
-    for (Integer i = 0; i < 30; i++) {
+    inventoryTable = new JTable(new DefaultTableModel(columns, 0));
+    for (Integer i = 0; i < inventorySize; i++) {
       try {
         invItems.absolute(i + 1);
         sinv[i][0] = invItems.getString("item_id");
         sinv[i][1] = invItems.getString("itemname");
         sinv[i][2] = invItems.getString("itemcount");
         sinv[i][3] = invItems.getString("itemfcount");
+        DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
+        model.addRow(sinv[i]);
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
     }
-    inventoryTable = new JTable(sinv, columns);
 
     JScrollPane sPane = new JScrollPane(inventoryTable);
     sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -129,6 +141,7 @@ public class managerMain implements ActionListener {
     menuRangeTextBox.add(MenuButton);
     menuRangeTextBox.add(addRowButton);
     addRowButton.addActionListener(this);
+    invaddRowButton.addActionListener(this);
     menuRangeTextBox.setBounds(100, 420, 300, 300);
 
     // Sets up the frame
@@ -164,6 +177,7 @@ public class managerMain implements ActionListener {
     inventoryRangeTextBox.setBounds(0, 905, 1000, 55);
     inventoryRangeTextBox.setBackground(primary);
     inventoryRangeTextBox.add(inventoryButton);
+    inventoryRangeTextBox.add(invaddRowButton);
     inventoryButton.addActionListener(this);
     MenuButton.addActionListener(this);
 
@@ -177,21 +191,29 @@ public class managerMain implements ActionListener {
     
   }
 
-  public void updateTable(ResultSet MenuItems, JTable tbl, String[][] sinv_menu){
-    
-  }
 
   public void actionPerformed(ActionEvent e) {
     System.out.println("Click");
     if (e.getSource() == inventoryButton) {
-      Object[] itemData = new Object [inventoryTable.getRowCount()];
-      Object[] itemidData = new Object [inventoryTable.getRowCount()];
+      Object[] col0 = new Object [inventoryTable.getRowCount()];
+      Object[] col1 = new Object [inventoryTable.getRowCount()];
+      Object[] col2 = new Object [inventoryTable.getRowCount()];
+      Object[] col3 = new Object [inventoryTable.getRowCount()];
 
       for (int i = 0; i < inventoryTable.getRowCount(); i++) {  // Loop through the rows
-        itemData[i] = inventoryTable.getValueAt(i, 2);
-        itemidData[i] = inventoryTable.getValueAt(i, 0);
-        String updateSQL= "UPDATE inventory SET itemcount=" + itemData[i].toString() + " WHERE item_id=" + itemidData[i].toString() + ";";
-        db.executeQuery(updateSQL);
+        col0[i] = inventoryTable.getValueAt(i, 0);
+        col1[i] = inventoryTable.getValueAt(i, 1);
+        col2[i] = inventoryTable.getValueAt(i, 2);
+        col3[i] = inventoryTable.getValueAt(i, 3);
+        String updateItem= "UPDATE inventory SET itemname=" +  "\'" + col1[i] + "\'" + " WHERE item_id=" + col0[i].toString();
+        String updatePrice= "UPDATE inventory SET itemCount=" + col2[i]  + " WHERE item_id=" + col0[i].toString();
+        String updateING= "UPDATE inventory SET itemfcount=" +  col3[i]  + " WHERE item_id=" + col0[i].toString();
+        System.out.println("Inventory CMD1 " + updateItem + "\n");
+        db.executeUpdate(updateItem);
+        db.executeUpdate(updatePrice);
+        db.executeUpdate(updateING);
+
+        //Needs ability to add a new item from a new row
      }
     } 
 
@@ -241,6 +263,35 @@ public class managerMain implements ActionListener {
         newRow[2] = MenuItems.getString("price");
         newRow[3] = MenuItems.getString("ingredients");
         DefaultTableModel model = (DefaultTableModel) menuTable.getModel();
+        model.addRow(newRow);
+      }catch(Exception ex){
+        System.out.println(ex.getMessage());
+      }
+    }
+
+    if(e.getSource() == invaddRowButton){
+      ResultSet MenuItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
+      Integer menuSize = 0;
+      try{
+        MenuItems.last();
+        menuSize = MenuItems.getInt("item_id");
+        MenuItems.close();
+      }catch(Exception ex){
+        System.out.println(ex.getMessage());
+      }
+      
+      String cmd = "INSERT INTO inventory(item_id, itemname, itemcount, itemfcount) VALUES("
+      + (menuSize + 1) + ", 'enter item name', 0, 3000)";
+      db.executeUpdate(cmd);
+      String[] newRow = new String[4];
+      MenuItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
+      try{
+        MenuItems.last();
+        newRow[0] = MenuItems.getString("item_id");
+        newRow[1] = MenuItems.getString("itemname");
+        newRow[2] = MenuItems.getString("itemcount");
+        newRow[3] = MenuItems.getString("itemfcount");
+        DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
         model.addRow(newRow);
       }catch(Exception ex){
         System.out.println(ex.getMessage());
