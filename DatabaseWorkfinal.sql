@@ -49,9 +49,9 @@ CREATE TABLE inventory (
 
 CREATE TABLE lowInventory (
   priority_id SERIAL PRIMARY KEY,
-  FOREIGN KEY(item_id) REFERENCES inventory(item_id)
+  item_id INT
 );
-
+-- FOREIGN KEY(item_id) REFERENCES inventory(item_id) (THIS WAS IN THE ABOVE CMD)
 
 -- Filling Menu table NOTE: food_id is automatically filled in since it is a SERIAL data type
 -- for ingredients if same item is used twice (double cheeseburger) simply list it twice

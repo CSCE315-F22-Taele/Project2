@@ -177,6 +177,12 @@ public class Database {
                     inv.absolute(i+1);
                     nextCount = inv.getInt("itemcount") - subAmt[i];
                     executeUpdate(query + nextCount + query2 + (i+1));
+
+                    // Adding code to populate Low Inventory
+                    // if the current count is less than 10 % of its full count
+                    if(inv.getInt("itemcount") < (.10 * inv.getInt("itemfcount"))){
+                        executeUpdate("INSERT INTO lowinventory (item_id) VALUES (" + (i+1) + ")");
+                    }
                 }
             }catch(Exception e){}
         }
