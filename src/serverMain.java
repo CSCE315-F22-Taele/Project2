@@ -23,7 +23,7 @@ public class serverMain implements ActionListener{
 
   // Double prices[] = {7.89,7.29,6.49,6.99,9.69,6.49,8.29,7.09,7.49,3.29,4.49,4.49,2.69,2.69,2.69,2.69,1.79,2.19,2.45,6.79,7.29};
 
-  JButton menuButtons[] = new JButton[20];
+  JButton menuButtons[] = new JButton[30];
   Double runTot = 0.0; //Total price of order that is displayed to total side of screen
   DecimalFormat df = new DecimalFormat("0.00");
   JButton checkout = new JButton("CHECKOUT");
@@ -32,6 +32,7 @@ public class serverMain implements ActionListener{
   JTextArea ongoingOrder = new JTextArea("   Current Order:\n", 35,35);
   String order = "";
   JLabel totalTitle = new JLabel("Order Total:     " + df.format(runTot), JLabel.CENTER);
+  Integer menuRowsCount = 20; //Number to keep track of rows in menu
   // Database object to communicate with the server
   Database db;
 
@@ -40,6 +41,7 @@ public class serverMain implements ActionListener{
     JFrame frame = new JFrame(); 
     JPanel menu = new JPanel(); //FIRST TAB
     JPanel menu2 = new JPanel(); //SECOND TAB
+    JPanel menu3 = new JPanel(); //SECOND TAB
     JPanel total = new JPanel(); //RIGHT SIDE OF GUI WHERE RUNNING TOTAL IS KEPT
 
     JTabbedPane tabbedPane = new JTabbedPane(); //ALLOWS FOR TABBED MENU
@@ -69,11 +71,13 @@ public class serverMain implements ActionListener{
 
     menu.setLayout(new GridLayout(5,4,10,10)); // args is rows, columns
     menu2.setLayout(new GridLayout(5,4,10,10)); // args is rows, columns
+    menu3.setLayout(new GridLayout(5,4,10,10)); // args is rows, columns
 
     // POPULATING BOTH MENUS WITH BUTTONS
     ResultSet menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
 
     Integer j = 10; //counter for second page (starts at index 10)
+    Integer k = 20; //counter for possible third page
     for(Integer i = 0; i < 10; i++){ // counter for first page (starts at index 0)
       try{
 
@@ -93,8 +97,18 @@ public class serverMain implements ActionListener{
         menuButtons[i+j].addActionListener(this);
         menu.add(menuButtons[i]);
         menu2.add(menuButtons[i+j]);
-
-        //j++;
+        
+        if(menuItems.absolute(k+i+1)){ //false if row does not exist
+          menuItems.absolute(k+i+1);
+          name = menuItems.getString("menuitem");
+          menuButtons[k+i] = new JButton(name);
+          menuButtons[k+i].setBackground(buttonColor);
+          menuButtons[k+i].setFont(guiFont);
+          menuButtons[k+i].addActionListener(this);
+          menu3.add(menuButtons[k+i]);
+          menuRowsCount += 1; //increment number of rows
+        }
+        
       }catch(Exception e){
         System.out.println(e.getMessage());
       }
@@ -111,6 +125,7 @@ public class serverMain implements ActionListener{
     // ADDING ITEMS TO PROPER CONTAINER
     tabbedPane.add("Menu1", menu);
     tabbedPane.add("Menu2", menu2);
+    tabbedPane.add("Menu3", menu3);
     total.add(totalTitle); //The order that these are added matters
     total.add(ongoingOrder);
     total.add(checkout);
@@ -125,7 +140,7 @@ public class serverMain implements ActionListener{
   public void actionPerformed(ActionEvent e) {
     ResultSet menuItems;
 
-      for(Integer i = 0; i < 20; i++){
+      for(Integer i = 0; i < menuRowsCount; i++){
         if(e.getSource()==menuButtons[i]){
           menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
           //the i variable will also be passed into the constructor
