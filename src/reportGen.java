@@ -72,7 +72,8 @@ public class reportGen {
     }
 
     else if(report == "excess"){
-
+      //Use same logic with salesNumbers array and run that through the switch statement in database
+      
     }
 
     else if(report == "restock"){
