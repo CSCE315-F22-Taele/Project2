@@ -4,6 +4,9 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+
 public class reportGen {
   // Takes in a start and end time as well as the type of report to be generated
   // SELECT * FROM orderhistory WHERE time_stamp >= '<start>' AND time_stamp <= '<end>';
@@ -18,8 +21,13 @@ public class reportGen {
     int totMenuItems = 0;
     ResultSet menuItems;
     ArrayList<String> lowInvItems; //Keeps track of items in lowinventory
+
   reportGen(String start, String end, String report){
     db = new Database();
+    JFrame frame = new JFrame();
+    JTextArea reportDetails = new JTextArea();
+    String reportString = "";
+
     // CHECKING WHAT TYPE OF REPORT IS TO BE GENERATED
     try{
     FileWriter myFile = new FileWriter(report + "Report.txt");
@@ -49,13 +57,16 @@ public class reportGen {
         salesNumbers.set((menuItem - 1), curvalue + 1);
       }
       myFile.write("Sales Report from " + start + " to " + end + "\n\n");
+      reportString += "Sales Report from " + start + " to " + end + "\n\n";
       myFile.write("Item\t\t\tSales\t\t\tTotal Revenue\n");
+      reportString += "Item\tSales\tTotal Revenue\n";
       //loop through orderdetails and increment an array index
       menuItems = db.executeQuery("SELECT * FROM menu");
       menuItems.first();
       for(Integer i = 0; i < totMenuItems; i++){
         menuItems.absolute(i+1);
         myFile.write(menuItems.getString("menuitem") + "\t" + salesNumbers.get(i) + "\t$" + (df.format((menuItems.getDouble("price")) * salesNumbers.get(i))) + "\n");
+        reportString += menuItems.getString("menuitem") + "\t" + salesNumbers.get(i) + "\t$" + (df.format((menuItems.getDouble("price")) * salesNumbers.get(i))) + "\n";
       }
 
     }
@@ -69,11 +80,13 @@ public class reportGen {
         ResultSet Inv = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
         // Initial lines at top of file
         myFile.write("Inventory Items that need to be restocked:\n\n");
+        reportString += "Inventory Items that need to be restocked:\n\n";
         while(lowInv.next()){
           int itemId = lowInv.getInt("item_id");
           Inv.absolute(itemId);
           String itemName = Inv.getString("itemname");
           myFile.write(itemName + " has a current count of: " + Inv.getInt("itemcount")  + "\n");
+          reportString += itemName + " has a current count of: " + Inv.getInt("itemcount")  + "\n";
         }
     }
     
@@ -92,5 +105,13 @@ public class reportGen {
     catch(Exception ex){ //exception for database stuff
       System.out.println(ex.getMessage());
     }
+    frame.setSize(1000, 1000);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLayout(null);
+    frame.setResizable(false);
+    reportDetails.setBounds(200, 0, 500, 1000);
+    reportDetails.setText(reportString);
+    frame.add(reportDetails);
+    frame.setVisible(true);
   }
 }
