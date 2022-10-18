@@ -1,5 +1,7 @@
 import java.sql.*;
 
+import javax.print.attribute.standard.PresentationDirection;
+
 public class Database {
     private Connection conn;
     private String teamNumber;
@@ -68,6 +70,8 @@ public class Database {
 
     public void updateInventory(String ingredients) {
         ResultSet inv = executeQuery("SELECT * FROM inventory ORDER BY item_id");
+        ResultSet lowInv = executeQuery("SELECT * FROM lowinventory");
+        Boolean present = false;
         int currInv = 0;
         try{
             inv.last();
@@ -179,14 +183,24 @@ public class Database {
             try{
                 if(subAmt[i] != 0){
                     inv = executeQuery("SELECT * FROM inventory ORDER BY item_id");
+                    lowInv = executeQuery("SELECT * FROM lowinventory");
                     inv.absolute(i+1);
                     nextCount = inv.getInt("itemcount") - subAmt[i];
                     executeUpdate(query + nextCount + query2 + (i+1));
 
                     // Adding code to populate Low Inventory
-                    // if the current count is less than 10 % of its full count
+                    // if the current count is less than 10 % of its full count and not in low inventory
+
                     if(inv.getInt("itemcount") < (.10 * inv.getInt("itemfcount"))){
-                        executeUpdate("INSERT INTO lowinventory (item_id) VALUES (" + (i+1) + ")");
+                        while(lowInv.next()){
+                            if(lowInv.getInt("item_id") == (i+1) ){
+                                present = true;
+                            }
+                        }
+                        
+                        if(!present){
+                            executeUpdate("INSERT INTO lowinventory (item_id) VALUES (" + (i+1) + ")");
+                        }
                     }
                 }
             }catch(Exception e){

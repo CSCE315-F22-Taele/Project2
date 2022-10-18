@@ -17,6 +17,7 @@ public class reportGen {
     DecimalFormat df = new DecimalFormat("0.00");
     int totMenuItems = 0;
     ResultSet menuItems;
+    ArrayList<String> lowInvItems; //Keeps track of items in lowinventory
   reportGen(String start, String end, String report){
     db = new Database();
     // CHECKING WHAT TYPE OF REPORT IS TO BE GENERATED
@@ -47,7 +48,7 @@ public class reportGen {
         // increment the value by 1
         salesNumbers.set((menuItem - 1), curvalue + 1);
       }
-      myFile.write("Sales Report from " + start + " to " + end + "\n");
+      myFile.write("Sales Report from " + start + " to " + end + "\n\n");
       myFile.write("Item\t\t\tSales\t\t\tTotal Revenue\n");
       //loop through orderdetails and increment an array index
       menuItems = db.executeQuery("SELECT * FROM menu");
@@ -65,8 +66,14 @@ public class reportGen {
 
     else if(report == "restock"){
         ResultSet lowInv = db.executeQuery("SELECT * FROM lowinventory");
+        ResultSet Inv = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
+        // Initial lines at top of file
+        myFile.write("Inventory Items that need to be restocked:\n\n");
         while(lowInv.next()){
           int itemId = lowInv.getInt("item_id");
+          Inv.absolute(itemId);
+          String itemName = Inv.getString("itemname");
+          myFile.write(itemName + " has a current count of: " + Inv.getInt("itemcount")  + "\n");
         }
     }
     
@@ -76,7 +83,7 @@ public class reportGen {
     }
 
     myFile.close();
-    
+
     } //end of try block
     catch (IOException e){ //exception for file IO
       System.out.println("An error occurred.");
