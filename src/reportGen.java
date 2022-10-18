@@ -25,8 +25,8 @@ public class reportGen {
   reportGen(String start, String end, String report){
     db = new Database();
     JFrame frame = new JFrame();
-    JTextArea reportDetails = new JTextArea();
-    String reportString = "";
+    JTextArea reportDetails = new JTextArea(); //area on frame where report is displayed
+    String reportString = ""; //this string is added to based on report type
 
     // CHECKING WHAT TYPE OF REPORT IS TO BE GENERATED
     try{
@@ -98,6 +98,7 @@ public class reportGen {
     myFile.close();
 
     } //end of try block
+    // ERROR CHECKING
     catch (IOException e){ //exception for file IO
       System.out.println("An error occurred.");
       e.printStackTrace();
@@ -105,6 +106,8 @@ public class reportGen {
     catch(Exception ex){ //exception for database stuff
       System.out.println(ex.getMessage());
     }
+
+    // SETTING UP FRAME TO DISPLAY REPORT DETAILS
     frame.setSize(1000, 1000);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(null);
