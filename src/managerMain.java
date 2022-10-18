@@ -32,16 +32,21 @@ public class managerMain implements ActionListener {
   JButton addRowButton;
   JButton invaddRowButton;
 
+  // REPORT BUTTONS
+  JButton salesReport;
+  JButton restockReport;
+  JButton excessReport;
+  JButton comboReport;
   
-  
-  
-
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
     Color primary = new Color(0x2A2A72);
     Font guiFont = new Font("Impact", Font.PLAIN, 20);
     inventoryButton = new JButton("Make Changes");
-    
+    salesReport = new JButton("Sales Report");
+    restockReport = new JButton("Restock Report");
+    excessReport = new JButton("Excess Report");
+    comboReport = new JButton("Combo Report");
     // Create frame
     JFrame frame = new JFrame();
     db = new Database();
@@ -54,7 +59,7 @@ public class managerMain implements ActionListener {
     JPanel itemRangeTextBox = new JPanel();
     JPanel inventoryRangeTextBox = new JPanel();
     JPanel menuRangeTextBox = new JPanel();
-    JLabel itemRangeTitle = new JLabel("Item History");
+    JLabel itemRangeTitle = new JLabel("Report Generator");
     MenuButton = new JButton("Change Menu");
     addRowButton = new JButton("Add Row");
     invaddRowButton = new JButton("Add Row");
@@ -102,19 +107,19 @@ public class managerMain implements ActionListener {
     }
 
     // Critically Low inventory
-    ResultSet critLowItems = db.executeQuery("SELECT * FROM inventory ORDER BY priority_id");
-    critTable = new JTable(new DefaultTableModel(cicolumns, 0));
-    for (Integer i = 0; i < ciSize; i++) {
-      try {
-        invItems.absolute(i + 1);
-        sinv[i][0] = critLowItems.getString("priority_id");
-        sinv[i][1] = critLowItems.getString("item_id");
-        DefaultTableModel model = (DefaultTableModel) critTable.getModel();
-        model.addRow(cisinv[i]);
-      } catch (Exception e) {
-          System.out.println(e.getMessage());
-      }
-    }
+    // ResultSet critLowItems = db.executeQuery("SELECT * FROM inventory ORDER BY priority_id");
+    // critTable = new JTable(new DefaultTableModel(cicolumns, 0));
+    // for (Integer i = 0; i < ciSize; i++) {
+    //   try {
+    //     invItems.absolute(i + 1);
+    //     sinv[i][0] = critLowItems.getString("priority_id");
+    //     sinv[i][1] = critLowItems.getString("item_id");
+    //     DefaultTableModel model = (DefaultTableModel) critTable.getModel();
+    //     model.addRow(cisinv[i]);
+    //   } catch (Exception e) {
+    //       System.out.println(e.getMessage());
+    //   }
+    // }
 
 
     JScrollPane sPane = new JScrollPane(inventoryTable);
@@ -195,6 +200,10 @@ public class managerMain implements ActionListener {
     itemRangeTitle.setFont(guiFont);
 
     itemRange.add(itemRangeTitle);
+    itemRange.add(salesReport);
+    itemRange.add(restockReport);
+    itemRange.add(excessReport);
+    itemRange.add(comboReport);
 
     // Sets up current Inventory
     currentInventory.setBounds(0, 505, 1000, 400);
