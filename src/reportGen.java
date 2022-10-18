@@ -73,6 +73,32 @@ public class reportGen {
 
     else if(report == "excess"){
       //Use same logic with salesNumbers array and run that through the switch statement in database
+      ResultSet ohItems = db.executeQuery("SELECT * FROM orderhistory WHERE time_stamp >= '" + start + "' AND time_stamp <= '" + end + "'");
+      ohItems.first();
+      int firstID = ohItems.getInt("order_id"); //first order no. in time frame
+      ohItems.last();
+      int lastID = ohItems.getInt("order_id"); //last order no. in time frame
+
+      ResultSet odItems = db.executeQuery("SELECT * FROM orderdetails WHERE order_id >= " + firstID + " AND order_id <= " + lastID);
+      menuItems = db.executeQuery("SELECT * FROM menu");
+      menuItems.last();
+      totMenuItems = menuItems.getInt("food_id");
+      ArrayList<Integer> salesNumbers = new ArrayList<Integer>(totMenuItems);
+      for(Integer i = 0; i < totMenuItems; i++){
+        salesNumbers.add(0);
+      }
+
+      while(odItems.next()){
+        int menuItem = odItems.getInt("food_id");
+        // Get current value at this index
+        Integer curvalue = salesNumbers.get(menuItem - 1);
+        // increment the value by 1
+        salesNumbers.set((menuItem - 1), curvalue + 1);
+      }
+      // salesNUMBERS has the number of times each item was ordered in that items index
+      // salesNumbers.get(0) will return the number of times the bacon cheeseburger was ordered
+      // salesNumbers.get(totMenuItems - 1) will return the number of times the last item on the menu was ordered
+
       
     }
 
