@@ -199,6 +199,8 @@ public class managerMain implements ActionListener {
     itemRangeTitle.setForeground(new Color(255, 255, 255));
     itemRangeTitle.setFont(guiFont);
 
+
+    restockReport.addActionListener(this);
     itemRange.add(itemRangeTitle);
     itemRange.add(salesReport);
     itemRange.add(restockReport);
@@ -324,6 +326,9 @@ public class managerMain implements ActionListener {
       }catch(Exception ex){
         System.out.println(ex.getMessage());
       }
+    }
+    if(e.getSource() == restockReport){
+      new reportGen("0", "0", "restock"); 
     }
   }
 }
