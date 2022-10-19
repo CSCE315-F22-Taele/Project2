@@ -16,6 +16,8 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class serverMain implements ActionListener{
   // THESE ARRAYS ARE NO LONGER BEING USED AS ALL INFO IS EXTRACTED FROM DB NOW
@@ -35,6 +37,10 @@ public class serverMain implements ActionListener{
   Integer menuRowsCount = 20; //Number to keep track of rows in menu
   // Database object to communicate with the server
   Database db;
+  // "item 1, item 2"
+
+  // 0 1 4 5
+  HashMap<String, Integer> pair;
 
   serverMain() {
     // DEFINING MAIN J OBJECTS USED
@@ -167,6 +173,8 @@ public class serverMain implements ActionListener{
 
       if(e.getSource()==checkout){
         // MOVE STUFF FROM ABOVE TO ONLY DECREMENT ONCE THIS BUTTON IS PUSHED
+
+        Collections.sort(currOrder);
         menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
         try{
           ResultSet orderDetails = db.executeQuery("SELECT * FROM orderdetails ORDER BY order_id");
