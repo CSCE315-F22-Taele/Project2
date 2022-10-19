@@ -37,7 +37,10 @@ public class managerMain implements ActionListener {
   JButton restockReport;
   JButton excessReport;
   JButton comboReport;
-  
+
+  /**
+   * @exception Exception if result set has an error
+   */
   managerMain() {
     // DEFINING MAIN J OBJECTS USED
     Color primary = new Color(0x2A2A72);
@@ -71,10 +74,10 @@ public class managerMain implements ActionListener {
     String[][] sinv = new String[30][4];
     ResultSet inventoryItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
     Integer inventorySize = 0;
-    try{
+    try {
       inventoryItems.last();
       inventorySize = inventoryItems.getInt("item_id");
-    }catch(Exception e){
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
 
@@ -99,28 +102,28 @@ public class managerMain implements ActionListener {
     String[][] cisinv = new String[30][4];
     ResultSet critItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
     Integer ciSize = 0;
-    try{
+    try {
       critItems.last();
       ciSize = inventoryItems.getInt("item_id");
-    }catch(Exception e){
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
 
     // Critically Low inventory
-    // ResultSet critLowItems = db.executeQuery("SELECT * FROM inventory ORDER BY priority_id");
+    // ResultSet critLowItems = db.executeQuery("SELECT * FROM inventory ORDER BY
+    // priority_id");
     // critTable = new JTable(new DefaultTableModel(cicolumns, 0));
     // for (Integer i = 0; i < ciSize; i++) {
-    //   try {
-    //     invItems.absolute(i + 1);
-    //     sinv[i][0] = critLowItems.getString("priority_id");
-    //     sinv[i][1] = critLowItems.getString("item_id");
-    //     DefaultTableModel model = (DefaultTableModel) critTable.getModel();
-    //     model.addRow(cisinv[i]);
-    //   } catch (Exception e) {
-    //       System.out.println(e.getMessage());
-    //   }
+    // try {
+    // invItems.absolute(i + 1);
+    // sinv[i][0] = critLowItems.getString("priority_id");
+    // sinv[i][1] = critLowItems.getString("item_id");
+    // DefaultTableModel model = (DefaultTableModel) critTable.getModel();
+    // model.addRow(cisinv[i]);
+    // } catch (Exception e) {
+    // System.out.println(e.getMessage());
     // }
-
+    // }
 
     JScrollPane sPane = new JScrollPane(inventoryTable);
     sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -137,10 +140,10 @@ public class managerMain implements ActionListener {
     JLabel currentMenuTitle = new JLabel("Menu");
 
     Integer menuSize = 0;
-    try{
+    try {
       MenuItems.last();
       menuSize = MenuItems.getInt("food_id");
-    }catch(Exception e){
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
 
@@ -163,7 +166,7 @@ public class managerMain implements ActionListener {
     }
 
     // menuTable = new JTable(sinv_menu, columns_menu);
-    //menuTable = updateTable(MenuItems);
+    // menuTable = updateTable(MenuItems);
     JScrollPane sPane_menu = new JScrollPane(menuTable);
     sPane_menu.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     menuTable.setFont(new Font("Impact", Font.PLAIN, 15));
@@ -199,7 +202,6 @@ public class managerMain implements ActionListener {
     itemRangeTitle.setForeground(new Color(255, 255, 255));
     itemRangeTitle.setFont(guiFont);
 
-
     restockReport.addActionListener(this);
     itemRange.add(itemRangeTitle);
     itemRange.add(salesReport);
@@ -218,75 +220,80 @@ public class managerMain implements ActionListener {
     inventoryRangeTextBox.add(inventoryButton);
     inventoryRangeTextBox.add(invaddRowButton);
     inventoryButton.addActionListener(this);
-    MenuButton.addActionListener(this);   
+    MenuButton.addActionListener(this);
   }
 
-
+  /**
+   * @param e action event, the button that got pressed
+   * @exception Exception if result set has an error
+   */
   public void actionPerformed(ActionEvent e) {
     System.out.println("Click");
     if (e.getSource() == inventoryButton) {
-      Object[] col0 = new Object [inventoryTable.getRowCount()];
-      Object[] col1 = new Object [inventoryTable.getRowCount()];
-      Object[] col2 = new Object [inventoryTable.getRowCount()];
-      Object[] col3 = new Object [inventoryTable.getRowCount()];
+      Object[] col0 = new Object[inventoryTable.getRowCount()];
+      Object[] col1 = new Object[inventoryTable.getRowCount()];
+      Object[] col2 = new Object[inventoryTable.getRowCount()];
+      Object[] col3 = new Object[inventoryTable.getRowCount()];
 
-      for (int i = 0; i < inventoryTable.getRowCount(); i++) {  // Loop through the rows
+      for (int i = 0; i < inventoryTable.getRowCount(); i++) { // Loop through the rows
         col0[i] = inventoryTable.getValueAt(i, 0);
         col1[i] = inventoryTable.getValueAt(i, 1);
         col2[i] = inventoryTable.getValueAt(i, 2);
         col3[i] = inventoryTable.getValueAt(i, 3);
-        String updateItem= "UPDATE inventory SET itemname=" +  "\'" + col1[i] + "\'" + " WHERE item_id=" + col0[i].toString();
-        String updatePrice= "UPDATE inventory SET itemCount=" + col2[i]  + " WHERE item_id=" + col0[i].toString();
-        String updateING= "UPDATE inventory SET itemfcount=" +  col3[i]  + " WHERE item_id=" + col0[i].toString();
+        String updateItem = "UPDATE inventory SET itemname=" + "\'" + col1[i] + "\'" + " WHERE item_id="
+            + col0[i].toString();
+        String updatePrice = "UPDATE inventory SET itemCount=" + col2[i] + " WHERE item_id=" + col0[i].toString();
+        String updateING = "UPDATE inventory SET itemfcount=" + col3[i] + " WHERE item_id=" + col0[i].toString();
         System.out.println("Inventory CMD1 " + updateItem + "\n");
         db.executeUpdate(updateItem);
         db.executeUpdate(updatePrice);
         db.executeUpdate(updateING);
 
-        //Needs ability to add a new item from a new row
-     }
-    } 
-
+        // Needs ability to add a new item from a new row
+      }
+    }
 
     if (e.getSource() == MenuButton) {
-      Object[] col0 = new Object [menuTable.getRowCount()];
-      Object[] col1 = new Object [menuTable.getRowCount()];
-      Object[] col2 = new Object [menuTable.getRowCount()];
-      Object[] col3 = new Object [menuTable.getRowCount()];
+      Object[] col0 = new Object[menuTable.getRowCount()];
+      Object[] col1 = new Object[menuTable.getRowCount()];
+      Object[] col2 = new Object[menuTable.getRowCount()];
+      Object[] col3 = new Object[menuTable.getRowCount()];
 
-      for (int i = 0; i < menuTable.getRowCount(); i++) {  // Loop through the rows
+      for (int i = 0; i < menuTable.getRowCount(); i++) { // Loop through the rows
         col0[i] = menuTable.getValueAt(i, 0);
         col1[i] = menuTable.getValueAt(i, 1);
         col2[i] = menuTable.getValueAt(i, 2);
         col3[i] = menuTable.getValueAt(i, 3);
-        String updateItem= "UPDATE menu SET menuItem=" +  "\'" + col1[i] + "\'" + " WHERE food_id=" + col0[i].toString();
-        String updatePrice= "UPDATE menu SET price=" + col2[i]  + " WHERE food_id=" + col0[i].toString();
-        String updateING= "UPDATE menu SET ingredients=" + "\'" + col3[i]  +  "\'" + " WHERE food_id=" + col0[i].toString();
+        String updateItem = "UPDATE menu SET menuItem=" + "\'" + col1[i] + "\'" + " WHERE food_id="
+            + col0[i].toString();
+        String updatePrice = "UPDATE menu SET price=" + col2[i] + " WHERE food_id=" + col0[i].toString();
+        String updateING = "UPDATE menu SET ingredients=" + "\'" + col3[i] + "\'" + " WHERE food_id="
+            + col0[i].toString();
         System.out.println("CMD1 " + updateItem + "\n");
         db.executeUpdate(updateItem);
         db.executeUpdate(updatePrice);
         db.executeUpdate(updateING);
 
-        //Needs ability to add a new item from a new row
-     }
-    } 
-    if(e.getSource() == addRowButton){
+        // Needs ability to add a new item from a new row
+      }
+    }
+    if (e.getSource() == addRowButton) {
       ResultSet MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
       Integer menuSize = 0;
-      try{
+      try {
         MenuItems.last();
         menuSize = MenuItems.getInt("food_id");
         MenuItems.close();
-      }catch(Exception ex){
+      } catch (Exception ex) {
         System.out.println(ex.getMessage());
       }
-      
+
       String cmd = "INSERT INTO menu(food_id, menuitem, price, ingredients) VALUES("
-      + (menuSize + 1) + ", 'enter item name', 0.00, 'add ingredients')";
+          + (menuSize + 1) + ", 'enter item name', 0.00, 'add ingredients')";
       db.executeUpdate(cmd);
       String[] newRow = new String[4];
       MenuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
-      try{
+      try {
         MenuItems.last();
         newRow[0] = MenuItems.getString("food_id");
         newRow[1] = MenuItems.getString("menuitem");
@@ -294,28 +301,28 @@ public class managerMain implements ActionListener {
         newRow[3] = MenuItems.getString("ingredients");
         DefaultTableModel model = (DefaultTableModel) menuTable.getModel();
         model.addRow(newRow);
-      }catch(Exception ex){
+      } catch (Exception ex) {
         System.out.println(ex.getMessage());
       }
     }
 
-    if(e.getSource() == invaddRowButton){
+    if (e.getSource() == invaddRowButton) {
       ResultSet MenuItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
       Integer menuSize = 0;
-      try{
+      try {
         MenuItems.last();
         menuSize = MenuItems.getInt("item_id");
         MenuItems.close();
-      }catch(Exception ex){
+      } catch (Exception ex) {
         System.out.println(ex.getMessage());
       }
-      
+
       String cmd = "INSERT INTO inventory(item_id, itemname, itemcount, itemfcount) VALUES("
-      + (menuSize + 1) + ", 'enter item name', 0, 3000)";
+          + (menuSize + 1) + ", 'enter item name', 0, 3000)";
       db.executeUpdate(cmd);
       String[] newRow = new String[4];
       MenuItems = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
-      try{
+      try {
         MenuItems.last();
         newRow[0] = MenuItems.getString("item_id");
         newRow[1] = MenuItems.getString("itemname");
@@ -323,12 +330,12 @@ public class managerMain implements ActionListener {
         newRow[3] = MenuItems.getString("itemfcount");
         DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
         model.addRow(newRow);
-      }catch(Exception ex){
+      } catch (Exception ex) {
         System.out.println(ex.getMessage());
       }
     }
-    if(e.getSource() == restockReport){
-      new reportGen("0", "0", "restock"); 
+    if (e.getSource() == restockReport) {
+      new reportGen("0", "0", "restock");
     }
   }
 }

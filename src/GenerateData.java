@@ -5,21 +5,22 @@ import java.util.Calendar;
 public class GenerateData {
     private int numberOfDays;
 
-    /*
-     * Constructs data object
-     * @param numberOfDays: The number of days to generate.
+    /**
+     * @param numberOfDays The number of days to generate.
      */
     public GenerateData(int numberOfDays){
         this.numberOfDays = numberOfDays;
     }
-
-    /*
+    
+    /**
      * Generates random orders starting from the specified date for numberOfDays
-     * @param stmt1: Statement to be used to access the menu items.
-     * @param stmt2: Statement to insert the values into the orderhistory
-     * @param year: Used for the current year
-     * @param month: Used for the current month
-     * @param day: Used for the current day
+     * 
+     * @param stmt1 Statement to be used to access the menu items.
+     * @param stmt2 Statement to insert the values into the orderhistory
+     * @param year  Used for the current year
+     * @param month Used for the current month
+     * @param day   Used for the current day
+     * @exception Exception if result set has an error
      */
     public void generate(Statement stmt1, Statement stmt2, int year, int month, 
     int day){
