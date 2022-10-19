@@ -153,7 +153,6 @@ public class reportGen {
 
     // SETTING UP FRAME TO DISPLAY REPORT DETAILS
     frame.setSize(1000, 1000);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(null);
     frame.setResizable(false);
     reportDetails.setBounds(200, 0, 500, 1000);
