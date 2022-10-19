@@ -18,6 +18,8 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import javax.swing.BorderFactory;
+import java.awt.BorderLayout;
 
 import javax.swing.table.*;
 
@@ -31,6 +33,8 @@ public class managerMain implements ActionListener {
   JButton MenuButton;
   JButton addRowButton;
   JButton invaddRowButton;
+  JTextField startTimeTextField;
+  JTextField endTimeTextField;
 
   // REPORT BUTTONS
   JButton salesReport;
@@ -47,6 +51,9 @@ public class managerMain implements ActionListener {
     restockReport = new JButton("Restock Report");
     excessReport = new JButton("Excess Report");
     comboReport = new JButton("Combo Report");
+    startTimeTextField = new JTextField("Start Time");
+    endTimeTextField = new JTextField("End Time");
+    
     // Create frame
     JFrame frame = new JFrame();
     db = new Database();
@@ -200,12 +207,13 @@ public class managerMain implements ActionListener {
     itemRangeTitle.setFont(guiFont);
 
 
-    restockReport.addActionListener(this);
     itemRange.add(itemRangeTitle);
     itemRange.add(salesReport);
     itemRange.add(restockReport);
     itemRange.add(excessReport);
     itemRange.add(comboReport);
+    itemRange.add(startTimeTextField);
+    itemRange.add(endTimeTextField);
 
     // Sets up current Inventory
     currentInventory.setBounds(0, 505, 1000, 400);
@@ -219,6 +227,10 @@ public class managerMain implements ActionListener {
     inventoryRangeTextBox.add(invaddRowButton);
     inventoryButton.addActionListener(this);
     MenuButton.addActionListener(this);   
+    salesReport.addActionListener(this);  
+    restockReport.addActionListener(this);
+    excessReport.addActionListener(this); 
+    comboReport.addActionListener(this); 
   }
 
 
@@ -327,8 +339,29 @@ public class managerMain implements ActionListener {
         System.out.println(ex.getMessage());
       }
     }
+    if(e.getSource() == salesReport){
+      String startTime = startTimeTextField.getText();
+      String endTime = endTimeTextField.getText();
+      new reportGen(startTime, endTime, "sales");
+    }
     if(e.getSource() == restockReport){
       new reportGen("0", "0", "restock"); 
+    }
+    if(e.getSource() == excessReport){
+      String startTime = startTimeTextField.getText();
+      Calendar date = Calendar.getInstance();
+      String endTime = "'" + date.get(Calendar.YEAR) + "-" 
+                + date.get(Calendar.MONTH) + "-" 
+                + date.get(Calendar.DAY_OF_MONTH) + " " 
+                + date.get(Calendar.HOUR_OF_DAY) + ":"
+                + date.get(Calendar.MINUTE) + ":" 
+                + date.get(Calendar.SECOND) + "'";
+      new reportGen(startTime, endTime, "excess"); 
+    }
+    if(e.getSource() == comboReport){
+      String startTime = startTimeTextField.getText();
+      String endTime = endTimeTextField.getText();
+      new reportGen(startTime, endTime, "combo"); 
     }
   }
 }
