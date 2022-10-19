@@ -2,10 +2,27 @@ import java.io.FileWriter;
 import java.io.IOException; 
 import java.sql.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-
+import java.util.*;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+
+class Pair<T,U> {
+  private final T key;
+  private final U value;
+
+  public Pair(T key, U value) {
+      this.key = key;
+      this.value = value;
+  }
+
+  public T getKey() {
+      return this.key;
+  }
+
+  public U getValue() {
+      return this.value;
+  }
+}
 
 public class reportGen {
   // Takes in a start and end time as well as the type of report to be generated
@@ -119,6 +136,52 @@ public class reportGen {
     
     // The "combo" report details what items sell together often
     else if(report == "combo"){
+      HashMap<String, Pair<String, Integer>> map = new HashMap<>();
+
+      ResultSet ohItems = db.executeQuery("SELECT * FROM orderhistory WHERE time_stamp >= '" + start + "' AND time_stamp <= '" + end + "'");
+
+      menuItems = db.executeQuery("SELECT * FROM menu ORDER BY food_id");
+      while(ohItems.next()){
+        int id = ohItems.getInt("order_id");
+        ResultSet odItems = db.executeQuery("SELECT * FROM orderdetails WHERE order_id = " + id);
+        ArrayList<Integer> ids = new ArrayList<>();
+        while(odItems.next()){
+          int foodId = odItems.getInt("food_id");
+          ids.add(foodId);
+        }
+        Collections.sort(ids);
+        for(int i=0; i<ids.size(); ++i){
+          for(int j=i+1; j<ids.size(); ++j){
+            String key = ids.get(i) + " " + ids.get(j);
+            if(map.containsKey(key)){
+              Pair<String, Integer> curr = map.get(key);
+              Pair<String, Integer> updated = new Pair<>(curr.getKey(), curr.getValue()+1);
+              map.put(key, updated);
+            }else{
+              String item1 = "";
+              String item2 = "";
+              menuItems.absolute(ids.get(i));
+              item1 = menuItems.getString("menuitem");
+              menuItems.absolute(ids.get(j));
+              item2 = menuItems.getString("menuitem");
+              String idk = item1 + " and " + item2;
+              Pair<String, Integer> newPair = new Pair<>(idk, 1);
+              map.put(key, newPair);
+            }
+          }
+        }
+      }
+
+      ArrayList<Pair<String, Integer>> p = new ArrayList<>();
+      for(Pair<String, Integer> pr : map.values()){
+        p.add(pr);
+      }
+      
+      Collections.sort(p, Comparator.comparing(x -> -x.getValue()));
+
+      for(Pair<String, Integer> pa : p){
+        System.out.println("Pair: " + pa.getKey() + " " + pa.getValue());
+      }
 
     }
 

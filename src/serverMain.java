@@ -37,10 +37,6 @@ public class serverMain implements ActionListener{
   Integer menuRowsCount = 20; //Number to keep track of rows in menu
   // Database object to communicate with the server
   Database db;
-  // "item 1, item 2"
-
-  // 0 1 4 5
-  HashMap<String, Integer> pair;
 
   serverMain() {
     // DEFINING MAIN J OBJECTS USED
@@ -125,8 +121,6 @@ public class serverMain implements ActionListener{
     checkout.setBackground(buttonColor);
     clear.addActionListener(this);
     clear.setBackground(buttonColor);
-
-
 
     // ADDING ITEMS TO PROPER CONTAINER
     tabbedPane.add("Menu1", menu);

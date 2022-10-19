@@ -2,10 +2,10 @@ public class runGUI {
   public static void main(String[] args) {
     // new managerMain();
     // new serverMain();
-    new startPage();
+    //new startPage();
 
     // SALES REPORT TEST
-    //new reportGen("2022-09-14 13:00:01", "2022-09-17 16:34:00", "sales");
+    new reportGen("2022-09-18 20:12:51", "2022-09-18 20:14:12", "combo");
 
     //start and end time not necessary for RESTOCK REPORT
     //new reportGen("0", "0", "restock"); 
