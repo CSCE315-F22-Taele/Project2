@@ -205,7 +205,8 @@ public class reportGen {
       Collections.sort(p, Comparator.comparing(x -> -x.getValue()));
 
       for(Pair<String, Integer> pa : p){
-        System.out.println("Pair: " + pa.getKey() + " " + pa.getValue());
+        //System.out.println("Pair: " + pa.getKey() + " " + pa.getValue());
+        reportString += "Pair: " + pa.getKey() + " " + pa.getValue() + "\n";
       }
     }
 
