@@ -4,6 +4,7 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 class Pair<T,U> {
@@ -53,7 +54,8 @@ public class reportGen {
     JFrame frame = new JFrame();
     JTextArea reportDetails = new JTextArea(); // area on frame where report is displayed
     String reportString = ""; // this string is added to based on report type
-
+    JScrollPane sPane = new JScrollPane(reportDetails);
+    sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     // CHECKING WHAT TYPE OF REPORT IS TO BE GENERATED
     try {
       FileWriter myFile = new FileWriter(report + "Report.txt");
@@ -249,9 +251,9 @@ public class reportGen {
     frame.setSize(1000, 1000);
     frame.setLayout(null);
     frame.setResizable(false);
-    reportDetails.setBounds(200, 0, 500, 1000);
+    sPane.setBounds(200, 0, 500, 850);
     reportDetails.setText(reportString);
-    frame.add(reportDetails);
+    frame.add(sPane);
     frame.setVisible(true);
   }
 }

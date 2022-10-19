@@ -116,22 +116,6 @@ public class managerMain implements ActionListener {
       System.out.println(e.getMessage());
     }
 
-    // Critically Low inventory
-    // ResultSet critLowItems = db.executeQuery("SELECT * FROM inventory ORDER BY
-    // priority_id");
-    // critTable = new JTable(new DefaultTableModel(cicolumns, 0));
-    // for (Integer i = 0; i < ciSize; i++) {
-    // try {
-    // invItems.absolute(i + 1);
-    // sinv[i][0] = critLowItems.getString("priority_id");
-    // sinv[i][1] = critLowItems.getString("item_id");
-    // DefaultTableModel model = (DefaultTableModel) critTable.getModel();
-    // model.addRow(cisinv[i]);
-    // } catch (Exception e) {
-    // System.out.println(e.getMessage());
-    // }
-    // }
-
     JScrollPane sPane = new JScrollPane(inventoryTable);
     sPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     inventoryTable.setFont(new Font("Impact", Font.PLAIN, 15));
@@ -244,7 +228,6 @@ public class managerMain implements ActionListener {
    * @exception Exception if result set has an error
    */
   public void actionPerformed(ActionEvent e) {
-    System.out.println("Click");
     if (e.getSource() == inventoryButton) {
       Object[] col0 = new Object[inventoryTable.getRowCount()];
       Object[] col1 = new Object[inventoryTable.getRowCount()];
@@ -260,7 +243,6 @@ public class managerMain implements ActionListener {
             + col0[i].toString();
         String updatePrice = "UPDATE inventory SET itemCount=" + col2[i] + " WHERE item_id=" + col0[i].toString();
         String updateING = "UPDATE inventory SET itemfcount=" + col3[i] + " WHERE item_id=" + col0[i].toString();
-        System.out.println("Inventory CMD1 " + updateItem + "\n");
         db.executeUpdate(updateItem);
         db.executeUpdate(updatePrice);
         db.executeUpdate(updateING);
@@ -285,7 +267,6 @@ public class managerMain implements ActionListener {
         String updatePrice = "UPDATE menu SET price=" + col2[i] + " WHERE food_id=" + col0[i].toString();
         String updateING = "UPDATE menu SET ingredients=" + "\'" + col3[i] + "\'" + " WHERE food_id="
             + col0[i].toString();
-        System.out.println("CMD1 " + updateItem + "\n");
         db.executeUpdate(updateItem);
         db.executeUpdate(updatePrice);
         db.executeUpdate(updateING);
