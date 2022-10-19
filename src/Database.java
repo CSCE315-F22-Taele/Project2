@@ -235,4 +235,116 @@ public class Database {
         }
     }
 
+
+
+    public int[] getInvNums(String ingredients) {
+        ResultSet inv = executeQuery("SELECT * FROM inventory ORDER BY item_id");
+        int currInv = 0;
+        try {
+            inv.last();
+            currInv = inv.getInt("item_id");
+        } catch (Exception e) {
+        }
+        String[] ings = ingredients.split(",");
+        int[] subAmt = new int[currInv + 1];
+        for (String s : ings) {
+            try {
+                switch (s) {
+                    case "bun":
+                        subAmt[0]++;
+                        break;
+                    case "txt":
+                        subAmt[1]++;
+                        break;
+                    case "pty":
+                        subAmt[2]++;
+                        break;
+                    case "bbp":
+                        subAmt[3]++;
+                        break;
+                    case "bcn":
+                        subAmt[4]++;
+                        break;
+                    case "ctr":
+                        subAmt[5]++;
+                        break;
+                    case "sfr":
+                        subAmt[6]++;
+                        break;
+                    case "ltc":
+                        subAmt[7]++;
+                        break;
+                    case "pkl":
+                        subAmt[8]++;
+                        break;
+                    case "tmt":
+                        subAmt[9]++;
+                        break;
+                    case "onn":
+                        subAmt[10]++;
+                        break;
+                    case "acs":
+                        subAmt[11]++;
+                        break;
+                    case "frs":
+                        subAmt[12]++;
+                        break;
+                    case "tts":
+                        subAmt[13]++;
+                        break;
+                    case "onr":
+                        subAmt[14]++;
+                        break;
+                    case "ktc":
+                        subAmt[15]++;
+                        break;
+                    case "ges":
+                        subAmt[16]++;
+                        break;
+                    case "srs":
+                        subAmt[17]++;
+                        break;
+                    case "gvy":
+                        subAmt[18]++;
+                        break;
+                    case "bfs":
+                        subAmt[19]++;
+                        break;
+                    case "hnm":
+                        subAmt[20]++;
+                        break;
+                    case "rnc":
+                        subAmt[21]++;
+                        break;
+                    case "bqs":
+                        subAmt[22]++;
+                        break;
+                    case "rfd":
+                        subAmt[23]++;
+                        break;
+                    case "lfd":
+                        subAmt[24]++;
+                        break;
+                    case "wts":
+                        subAmt[25]++;
+                        break;
+                    case "wtb":
+                        subAmt[26]++;
+                        break;
+                    case "dbi":
+                        subAmt[27]++;
+                        break;
+                    case "ash":
+                        subAmt[28]++;
+                        break;
+                    case "snd":
+                        subAmt[29]++;
+                        break;
+                }
+            } catch (Exception e) {
+            }
+        }
+        return subAmt;
+        }
 }
+

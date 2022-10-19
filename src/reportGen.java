@@ -111,12 +111,19 @@ public class reportGen {
           // increment the value by 1
           salesNumbers.set((menuItem - 1), curvalue + 1);
         }
+  
+        for (int i = 0; i < salesNumbers.size(); ++i) {
+          int id = salesNumbers.get(i+1);
+          menuItems.absolute(id);
+          String ings = menuItems.getString("ingredients");
+          
+          // int[] invchanges = db.getInvNums(ings);
+        }
+
         // salesNUMBERS has the number of times each item was ordered in that items
         // index
         // salesNumbers.get(0) will return the number of times the bacon cheeseburger
         // was ordered
-        // salesNumbers.get(totMenuItems - 1) will return the number of times the last
-        // item on the menu was ordered
 
       }
 
