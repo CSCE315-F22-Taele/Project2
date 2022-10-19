@@ -182,6 +182,8 @@ public class reportGen {
     
     // The "combo" report details what items sell together often
     else if(report == "combo"){
+      reportString += "Pairs of items that sold together and their frequency\nfrom " + start + " to " + end + "\n\n";
+      myFile.write("Pairs of items that sold together and their frequency\nfrom " + start + " to " + end + "\n\n");
       HashMap<String, Pair<String, Integer>> map = new HashMap<>();
 
       ResultSet ohItems = db.executeQuery("SELECT * FROM orderhistory WHERE time_stamp >= '" + start + "' AND time_stamp <= '" + end + "'");
@@ -227,7 +229,8 @@ public class reportGen {
 
       for(Pair<String, Integer> pa : p){
         //System.out.println("Pair: " + pa.getKey() + " " + pa.getValue());
-        reportString += "Pair: " + pa.getKey() + " " + pa.getValue() + "\n";
+        reportString += pa.getKey() + " " + pa.getValue() + "\n";
+        myFile.write(pa.getKey() + " " + pa.getValue() + "\n");
       }
     }
 
