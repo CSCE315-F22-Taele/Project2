@@ -34,7 +34,7 @@ public class GenerateData {
             menu = stmt1.executeQuery(
                     "SELECT * FROM menu ORDER BY food_id");
         } catch (Exception e) {
-            System.out.println("Failure.");
+            System.out.println(e.getMessage());
             return;
         }
 
@@ -68,7 +68,7 @@ public class GenerateData {
                         orderTotal += price;
                         // TODO push item to order linking table
                     } catch (Exception e) {
-                        System.out.println(e.toString());
+                        System.out.println(e.getMessage());
                         return;
                     }
                 }
@@ -111,8 +111,8 @@ public class GenerateData {
             }
 
             // Indicate the end of a day
-            System.out.println("Day "
-                    + date.get(Calendar.DAY_OF_MONTH) + " done, $" + money);
+            //System.out.println("Day "
+            //        + date.get(Calendar.DAY_OF_MONTH) + " done, $" + money);
         }
     }
 }

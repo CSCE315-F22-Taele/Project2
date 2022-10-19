@@ -230,7 +230,6 @@ public class reportGen {
       Collections.sort(p, Comparator.comparing(x -> -x.getValue()));
 
       for(Pair<String, Integer> pa : p){
-        //System.out.println("Pair: " + pa.getKey() + " " + pa.getValue());
         reportString += pa.getKey() + " " + pa.getValue() + "\n";
         myFile.write(pa.getKey() + " " + pa.getValue() + "\n");
       }
@@ -241,7 +240,6 @@ public class reportGen {
     } // end of try block
     // ERROR CHECKING
     catch (IOException e) { // exception for file IO
-      System.out.println("An error occurred.");
       e.printStackTrace();
     } catch (Exception ex) { // exception for database stuff
       System.out.println(ex.getMessage());

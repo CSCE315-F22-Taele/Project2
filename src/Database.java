@@ -1,8 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
 
-import javax.print.attribute.standard.PresentationDirection;
-
 public class Database {
     private Connection conn;
     private String teamNumber;
@@ -29,7 +27,6 @@ public class Database {
             System.exit(0);
         }
 
-        System.out.println("Opened database successfully");
     }
 
     /**
@@ -39,9 +36,8 @@ public class Database {
         // closing the connection
         try {
             conn.close();
-            System.out.println("Connection Closed.");
         } catch (Exception e) {
-            System.out.println("Connection NOT Closed.");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -83,7 +79,7 @@ public class Database {
         try {
             temp = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (Exception e) {
-            System.out.println("Error occured while creating statement.");
+            System.out.println(e.getMessage());
         }
         return temp;
     }
