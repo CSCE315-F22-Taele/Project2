@@ -103,6 +103,8 @@ public class reportGen {
       else if (report == "excess") {
         // Use same logic with salesNumbers array and run that through the switch
         // statement in database
+        reportString += "Items that sold less than 10% of their inventory\nfrom " + start + " to " + end + "\n\n";
+        myFile.write("Items that sold less than 10% of their inventory\nfrom " + start + " to " + end + "\n\n");
         ResultSet ohItems = db.executeQuery(
             "SELECT * FROM orderhistory WHERE time_stamp >= '" + start + "' AND time_stamp <= '" + end + "'");
         ohItems.first();
@@ -127,13 +129,34 @@ public class reportGen {
           // increment the value by 1
           salesNumbers.set((menuItem - 1), curvalue + 1);
         }
-  
+        ResultSet inv = db.executeQuery("SELECT * FROM inventory ORDER BY item_id");
+        int invSize = 0;
+        inv.last();
+        invSize = inv.getInt("item_id");
+        ArrayList<Integer> invNumbers = new ArrayList<Integer>(invSize);
+        for (Integer i = 0; i < invSize; i++) {
+          invNumbers.add(0);
+        }
+
         for (int i = 0; i < salesNumbers.size(); ++i) {
-          int id = salesNumbers.get(i+1);
-          menuItems.absolute(id);
+          int numSales = salesNumbers.get(i);
+          menuItems.absolute(i+1);
           String ings = menuItems.getString("ingredients");
-          
-          // int[] invchanges = db.getInvNums(ings);
+          for(int j = 0; j < numSales; j++){
+            db.getInvNums(ings, invNumbers);
+          }
+        }
+        for(Integer i = 0; i < invSize; i++){
+          if(invNumbers.get(i) == 0){
+            inv.absolute(i+1);
+            reportString += inv.getString("itemname") + " was not sold at all.\n";
+            myFile.write(inv.getString("itemname") + " was not sold at all.\n");
+          }
+          else if(invNumbers.get(i) < 350){
+            inv.absolute(i+1);
+            reportString += inv.getString("itemname") + " was only sold " + invNumbers.get(i) + " times.\n";
+            myFile.write(inv.getString("itemname") + " was only sold " + invNumbers.get(i) + " times.\n");
+          }
         }
 
         // salesNUMBERS has the number of times each item was ordered in that items

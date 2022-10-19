@@ -9,7 +9,7 @@ public class runGUI {
     new startPage();
 
     // SALES REPORT TEST
-    //new reportGen("2022-09-18 20:12:51", "2022-09-18 20:14:12", "combo");
+    // new reportGen("2022-09-18 20:12:51", "2022-09-18 20:14:12", "excess");
 
     // start and end time not necessary for RESTOCK REPORT
     // new reportGen("0", "0", "restock");

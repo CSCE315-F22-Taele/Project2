@@ -363,12 +363,12 @@ public class managerMain implements ActionListener {
     if(e.getSource() == excessReport){
       String startTime = startTimeTextField.getText();
       Calendar date = Calendar.getInstance();
-      String endTime = "'" + date.get(Calendar.YEAR) + "-" 
+      String endTime = date.get(Calendar.YEAR) + "-" 
                 + date.get(Calendar.MONTH) + "-" 
                 + date.get(Calendar.DAY_OF_MONTH) + " " 
                 + date.get(Calendar.HOUR_OF_DAY) + ":"
                 + date.get(Calendar.MINUTE) + ":" 
-                + date.get(Calendar.SECOND) + "'";
+                + date.get(Calendar.SECOND);
       new reportGen(startTime, endTime, "excess"); 
     }
     if(e.getSource() == comboReport){
