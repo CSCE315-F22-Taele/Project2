@@ -1,4 +1,8 @@
 public class runGUI {
+
+  /**
+   * @param args command line arguments
+   */
   public static void main(String[] args) {
     // new managerMain();
     // new serverMain();
@@ -7,8 +11,8 @@ public class runGUI {
     // SALES REPORT TEST
     new reportGen("2022-09-18 20:12:51", "2022-09-18 20:14:12", "combo");
 
-    //start and end time not necessary for RESTOCK REPORT
-    //new reportGen("0", "0", "restock"); 
+    // start and end time not necessary for RESTOCK REPORT
+    // new reportGen("0", "0", "restock");
   }
 }
 
