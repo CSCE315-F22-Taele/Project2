@@ -86,8 +86,8 @@ public class reportGen {
         }
         myFile.write("Sales Report from " + start + " to " + end + "\n\n");
         reportString += "Sales Report from " + start + " to " + end + "\n\n";
-        myFile.write("Item\t\t\tSales\t\t\tTotal Revenue\n");
-        reportString += "Item\tSales\tTotal Revenue\n";
+        myFile.write("Item" + "Sales"+"Total Revenue");
+        reportString += String.format("%-35s %-15s %-15s", "Item", "Sales", "Total Revenue\n\n");
         // loop through orderdetails and increment an array index
         menuItems = db.executeQuery("SELECT * FROM menu");
         menuItems.first();
@@ -95,8 +95,7 @@ public class reportGen {
           menuItems.absolute(i + 1);
           myFile.write(menuItems.getString("menuitem") + "\t" + salesNumbers.get(i) + "\t$"
               + (df.format((menuItems.getDouble("price")) * salesNumbers.get(i))) + "\n");
-          reportString += menuItems.getString("menuitem") + "\t" + salesNumbers.get(i) + "\t$"
-              + (df.format((menuItems.getDouble("price")) * salesNumbers.get(i))) + "\n";
+          reportString += String.format("%20s %20s %20s", menuItems.getString("menuitem"), salesNumbers.get(i), (df.format((menuItems.getDouble("price")) * salesNumbers.get(i))) + "\n");
         }
 
       }
